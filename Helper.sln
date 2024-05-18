@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helper.Web", "Helper.Web\Helper.Web.csproj", "{7D19E494-BF5B-4BC5-ACE7-F1D597C2513A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper.Domain", "Helper.Domain\Helper.Domain.csproj", "{DF23865E-17CC-48DD-9E3D-78DAB22DE7C3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7D19E494-BF5B-4BC5-ACE7-F1D597C2513A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D19E494-BF5B-4BC5-ACE7-F1D597C2513A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D19E494-BF5B-4BC5-ACE7-F1D597C2513A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D19E494-BF5B-4BC5-ACE7-F1D597C2513A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF23865E-17CC-48DD-9E3D-78DAB22DE7C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF23865E-17CC-48DD-9E3D-78DAB22DE7C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF23865E-17CC-48DD-9E3D-78DAB22DE7C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF23865E-17CC-48DD-9E3D-78DAB22DE7C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {664A7922-E895-4D7E-A66C-92EB461E8524}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,31 @@
+@import url(reset.css);
+
+html,
+body {
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+
+
+.header {
+
+}
+
+.main {
+  flex: 1 1 auto;
+}
+
+
+.footer {
+
+}
