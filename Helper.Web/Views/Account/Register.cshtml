@@ -1,0 +1,29 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Реєстрація";
+}
+
+<form asp-controller="Account" asp-action="Register" method="post">
+    <div>
+        <label asp-for="Username">Логін</label>
+        <input asp-for="Username" type="text" placeholder="Введіть ім'я користувача (логін)" />
+        <span asp-validation-for="Username"></span>
+    </div>
+    <div>
+        <label asp-for="Password">Пароль</label>
+        <input asp-for="Password" type="password" value="@Model.Password" placeholder="Введіть пароль" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="RepeatPassword">Підтвердження паролю</label>
+        <input asp-for="RepeatPassword" type="password" value="@Model.RepeatPassword" placeholder="Підтвердіть пароль" />
+        <span asp-validation-for="RepeatPassword"></span>
+    </div>
+    <div>
+        <button type="submit">Зареєструватися</button>
+    </div>
+    <div>
+        <a asp-controller="Account" asp-action="Login">Увійти</a>
+    </div>
+    <div>@ViewBag.Error</div>
+</form>
