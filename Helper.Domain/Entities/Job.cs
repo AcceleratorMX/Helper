@@ -31,18 +31,21 @@ public class Job : Entity<int>
     public Guid CreatorId { get; set; }
 
     [ForeignKey(nameof(CreatorId))]
-    public User Creator { get; set; }
+    public User? Creator { get; set; }
 
     [Display(Name = "Виконавець")]
     public Guid AssigneeId { get; set; }
 
     [ForeignKey(nameof(AssigneeId))]
-    public User Assignee { get; set; }
+    public User? Assignee { get; set; }
 
     [Display(Name = "Категорія")]
-    public byte CategoryId { get; set; }
+    public int CategoryId { get; set; }
 
+    [ForeignKey(nameof(CategoryId))]
     public Category? Category { get; set; }
+
+    public string JobPicturePath { get; set; } = string.Empty;
 
     public ICollection<Message>? Messages { get; set; }
 }

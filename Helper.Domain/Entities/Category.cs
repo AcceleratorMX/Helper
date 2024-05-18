@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Helper.Domain.Entities;
 
-public class Category : Entity<byte>
+public class Category : Entity<int>
 {
     [Display(Name = "Назва категорії")]
-    public string Name { get; set; } = string.Empty;
+    public string Title { get; set; } = string.Empty;
 
     [Display(Name = "Опис категорії")]
     public string Description { get; set; } = string.Empty;

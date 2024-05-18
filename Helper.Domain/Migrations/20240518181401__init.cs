@@ -15,8 +15,9 @@ namespace Helper.Domain.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<byte>(type: "tinyint", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -35,7 +36,11 @@ namespace Helper.Domain.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RegisterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ProfilePicturePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProfilePicturePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedJobs = table.Column<int>(type: "int", nullable: false),
+                    AcceptedJobs = table.Column<int>(type: "int", nullable: false),
+                    CompletedJobs = table.Column<int>(type: "int", nullable: false),
+                    FailedJobs = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -56,7 +61,8 @@ namespace Helper.Domain.Migrations
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AssigneeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<byte>(type: "tinyint", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    JobPicturePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -88,7 +94,8 @@ namespace Helper.Domain.Migrations
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsRead = table.Column<bool>(type: "bit", nullable: false),
                     JobId = table.Column<int>(type: "int", nullable: false),
-                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SenderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ReceiverId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,11 +107,15 @@ namespace Helper.Domain.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Messages_Users_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Messages_Users_SenderId",
                         column: x => x.SenderId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -126,6 +137,11 @@ namespace Helper.Domain.Migrations
                 name: "IX_Messages_JobId",
                 table: "Messages",
                 column: "JobId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_ReceiverId",
+                table: "Messages",
+                column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_SenderId",

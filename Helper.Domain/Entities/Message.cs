@@ -21,4 +21,9 @@ public class Message : Entity<long>
 
     [ForeignKey(nameof(SenderId))]
     public User? Sender { get; set; }
+
+    public Guid ReceiverId { get; set; }
+
+    [ForeignKey(nameof(ReceiverId))]
+    public User? Receiver { get; set; }
 }
