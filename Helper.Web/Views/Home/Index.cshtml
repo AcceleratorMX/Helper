@@ -2,7 +2,18 @@
     ViewData["Title"] = "Головна";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<ul>
+    @foreach (var job in Model.Jobs)
+    {
+    <li>
+        <article>
+            <h2>@job.Title</h2>
+            <p>@job.Description</p>
+            <p>Місцезнаходження: @job.Location</p>
+            <p>Категорія: @job.Category.Title</p>
+            <p>#@job.Id</p>
+            <p>Дата створення: @job.CreatedAt.ToString()</p>
+        </article>
+    </li>
+    }
+</ul>

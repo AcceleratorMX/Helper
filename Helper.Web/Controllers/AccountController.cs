@@ -35,6 +35,7 @@ namespace Helper.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> LoginAsync(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -49,13 +50,11 @@ namespace Helper.Web.Controllers
             if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "Некоректні дані для входу");
-                _logger.LogWarning($"User with username {model.Username} not found.");
                 return View("Login", model);
             }
-            else if (!PasswordService.VerifyPassword(model.Password, user.Password))
+            else if (!PasswordService.VerifyPassword(model.Password, user.Password!))
             {
                 ModelState.AddModelError(nameof(LoginViewModel.Password), "Некоректний пароль");
-                _logger.LogWarning("Password verification failed.");
                 return View("Login", model);
             }
 
@@ -64,6 +63,7 @@ namespace Helper.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterAsync(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
@@ -76,7 +76,6 @@ namespace Helper.Web.Controllers
                 .FirstOrDefault(u => u.Username == model.Username);
             if (existingUser != null)
             {
-                _logger.LogWarning($"User with username {model.Username} already exists.");
                 ViewBag.Error = "Користувач з таким ім'ям вже існує";
                 return View("Register", model);
             }
@@ -86,8 +85,7 @@ namespace Helper.Web.Controllers
                 Username = model.Username,
                 Password = PasswordService.HashPassword(model.Password),
             };
-
-            _logger.LogInformation($"Creating user with username {model.Username}.");
+            
             await _userRepository.CreateAsync(user);
 
             await AuthenticateAsync(user);

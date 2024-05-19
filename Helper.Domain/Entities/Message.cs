@@ -12,6 +12,7 @@ public class Message : Entity<long>
 
     public bool IsRead { get; set; }
 
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public int JobId { get; set; }
 
     [ForeignKey(nameof(JobId))]

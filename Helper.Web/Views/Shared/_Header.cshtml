@@ -1,0 +1,30 @@
+<header class="header">
+    <nav class="header_container">
+        <div class="logo_container">
+            <a class="logo" asp-area="" asp-controller="Home" asp-action="Index">Helper</a>
+        </div>
+        
+        <div class="navbar">
+            <div class="nav_items">
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    <a asp-controller="Job" asp-action="CreateJob">Створити</a>
+                    <div class="main-menu_container">
+                        <span class="nav_link">Привіт, @User.Identity.Name!</span>
+                        <ul class="main-menu">
+                            <li class="main-menu_item">Особистий кабінет</li>
+                            <li class="main-menu_item"><a asp-controller="Account" asp-action="Logout">Вийти</a></li>
+                        </ul>
+                    </div>
+
+                }
+                else
+                {
+                    <a class="nav_link" asp-controller="Account" asp-action="Login">Увійти</a>
+                    <a class="nav_link" asp-controller="Account" asp-action="Register">Реєстрація</a>
+                }
+            </div>
+        </div>
+    </nav>
+</header>
+

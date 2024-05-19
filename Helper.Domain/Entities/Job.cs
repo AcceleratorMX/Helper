@@ -34,7 +34,7 @@ public class Job : Entity<int>
     public User? Creator { get; set; }
 
     [Display(Name = "Виконавець")]
-    public Guid AssigneeId { get; set; }
+    public Guid? AssigneeId { get; set; }
 
     [ForeignKey(nameof(AssigneeId))]
     public User? Assignee { get; set; }
