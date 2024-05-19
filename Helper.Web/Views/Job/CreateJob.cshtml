@@ -1,4 +1,4 @@
-@model JobViewModel
+@model Job
 
 @{
     ViewData["Title"] = "Створити";
@@ -6,16 +6,15 @@
 
 <div class="add-form">
     <form asp-controller="Job" asp-action="CreateJob" class="job-form">
-        @Html.AntiForgeryToken()
         <div class="form-group">
-            <label asp-for="JobModel.Title">Назва завдання</label>
-            <input asp-for="JobModel.Title" class="input-job-name" placeholder="Вкажіть назву завдання"/>
-            <span asp-validation-for="JobModel.Title" class="validation-error"></span>
+            <label asp-for="Title">Назва завдання</label>
+            <input asp-for="Title" class="input-job-name" placeholder="Вкажіть назву завдання"/>
+            <span asp-validation-for="Title" class="validation-error"></span>
         </div>
         <div class="form-group">
-            <label asp-for="JobModel.Description">Опис завдання</label>
-            <textarea asp-for="JobModel.Description" class="input-job-name" placeholder="Сформулюйте завдання"></textarea>
-            <span asp-validation-for="JobModel.Description" class="validation-error"></span>
+            <label asp-for="Description">Опис завдання</label>
+            <textarea asp-for="Description" class="input-job-name" placeholder="Сформулюйте завдання"></textarea>
+            <span asp-validation-for="Description" class="validation-error"></span>
         </div>
         <div class="form-group">
             <label asp-for="CategoryId">Категорія</label>
@@ -25,13 +24,10 @@
             <span asp-validation-for="CategoryId" class="validation-error"></span>
         </div>
         <div class="form-group">
-            <label asp-for="JobModel.Location">Місто</label>
-            <input asp-for="JobModel.Location" class="input-job-name" placeholder="Вкажіть місце виконання завдання"/>
-            <span asp-validation-for="JobModel.Location" class="validation-error"></span>
+            <label asp-for="Location">Місто</label>
+            <input asp-for="Location" class="input-job-name" placeholder="Вкажіть місце виконання завдання"/>
+            <span asp-validation-for="Location" class="validation-error"></span>
         </div>
-
-
         <button type="submit" class="btn btn-outline-primary">Створити</button>
-
     </form>
 </div>

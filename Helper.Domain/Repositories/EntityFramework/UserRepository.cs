@@ -21,8 +21,7 @@ public class UserRepository(HelperDbContext context) : IRepository<User, Guid>
     public async Task CreateAsync(User entity)
     {
         entity.LastLoginDate = DateTime.UtcNow;
-    
-        DirectoryService.CreateUserDirectory(entity);
+        
         await context.Users.AddAsync(entity);
         await context.SaveChangesAsync();
     }

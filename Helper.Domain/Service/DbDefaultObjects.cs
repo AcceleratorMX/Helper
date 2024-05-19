@@ -26,8 +26,6 @@ public class DbDefaultObjects
             };
             context.Users.Add(user);
             context.SaveChanges();
-
-            DirectoryService.CreateUserDirectory(user);
         }
 
         context.SaveChanges();

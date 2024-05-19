@@ -1,7 +1,8 @@
+using System.Security.Claims;
 using Helper.Domain.Entities;
 using Helper.Domain.Entities.Abstract;
 using Helper.Domain.Repositories.Abstract;
-using Helper.Web.Models.Jobs;
+using Helper.Web.Models.Home;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Helper.Web.Controllers;
@@ -19,7 +20,7 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var model = new JobViewModel
+        var model = new HomeViewModel
         {
             JobModel = new Job(),
             Jobs = (await _jobRepository.GetAllAsync())
@@ -32,15 +33,20 @@ public class HomeController : Controller
                     Location = job.Location,
                     Category = job.Category,
                     Status = job.Status,
-                    CreatedAt = job.CreatedAt
+                    CreatedAt = job.CreatedAt,
+                    CreatorId = job.CreatorId
                 })
                 .Reverse()
                 .ToList()
         };
 
+        if (User.Identity!.IsAuthenticated)
+        {
+            var currentUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            ViewData["CurrentUserId"] = currentUserId;
+        }
+
         return View(model);
     }
-
-
 
 }

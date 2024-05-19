@@ -11,18 +11,15 @@ public class Message : Entity<long>
     public string Text { get; set; } = string.Empty;
 
     public bool IsRead { get; set; }
-
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public int JobId { get; set; }
 
     [ForeignKey(nameof(JobId))]
     public Job? Job { get; set; }
-
     public Guid SenderId { get; set; }
 
     [ForeignKey(nameof(SenderId))]
     public User? Sender { get; set; }
-
     public Guid ReceiverId { get; set; }
 
     [ForeignKey(nameof(ReceiverId))]

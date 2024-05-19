@@ -1,0 +1,22 @@
+@model CreateMessageViewModel
+
+@{
+ViewData["Title"] = "Створити";
+}
+
+<div class="add-form">
+    <form asp-controller="Message" asp-action="CreateMessage" class="message-form">
+
+        <h2>Завдання: @Model.JobTitle (#@Model.JobId)</h2>
+        <p>Для @Model.CreatorName:</p>
+        <div class="form-group">
+            <input type="hidden" asp-for="JobId" />
+            <label asp-for="Text">Текст повідомлення</label>
+            <textarea asp-for="Text" class="input-message-name" placeholder="Опишіть, чому саме ви. Та залиште контакти."></textarea>
+            <span asp-validation-for="Text" class="validation-error"></span>
+        </div>
+        <button type="submit" class="btn">Відправити</button>
+        <a asp-controller="Home" asp-action="Index">Назад</a>
+        
+    </form>
+</div>

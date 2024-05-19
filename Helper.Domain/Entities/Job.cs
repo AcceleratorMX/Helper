@@ -40,12 +40,11 @@ public class Job : Entity<int>
     public User? Assignee { get; set; }
 
     [Display(Name = "Категорія")]
+    [Required(ErrorMessage = "Вкажіть категорію!")]
     public int CategoryId { get; set; }
 
     [ForeignKey(nameof(CategoryId))]
     public Category? Category { get; set; }
-
-    public string JobPicturePath { get; set; } = string.Empty;
 
     public ICollection<Message>? Messages { get; set; }
 }

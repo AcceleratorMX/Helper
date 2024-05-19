@@ -25,9 +25,6 @@ public class User : Entity<Guid>
     [Display(Name = "Дата останнього входу")]
     public DateTime LastLoginDate { get; set; } = DateTime.UtcNow;
 
-    [Display(Name = "Шлях до фото профілю")]
-    public string ProfilePicturePath { get; set; } = string.Empty;
-
     [Display(Name = "Завдань створено")]
     public int CreatedJobs { get; set; } = 0;
 
