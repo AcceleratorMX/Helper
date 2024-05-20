@@ -16,7 +16,7 @@ public class JobRepository(HelperDbContext context) : IRepository<Job, int>
         var job = await context.Jobs.Include(job => job.Category).FirstOrDefaultAsync(job => job.Id == id);
         if (job == null)
         {
-            throw new Exception($"Job with id {id} not found");
+            throw new Exception($"JobModels with id {id} not found");
         }
         return job;
     }

@@ -1,0 +1,11 @@
+<h2>Мої завдання</h2>
+
+<p>Створені завдання:</p>
+@await Html.PartialAsync("_CreatedJobs", ViewBag.CreatedJobs, null)
+
+<br>
+<br>
+<br>
+
+<p>Прийняті завдання:</p>
+@await Html.PartialAsync("_AssignedJobs", ViewBag.AssignedJobs, null)

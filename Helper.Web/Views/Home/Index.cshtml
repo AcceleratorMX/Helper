@@ -21,7 +21,7 @@ var notifications = ViewData["Notifications"] as List<NotificationViewModel>;
                 {
                     if (job.CreatorId == currentUserId)
                     {
-                        <a asp-controller="Job" asp-action="Edit" asp-route-id="@job.Id" class="btn btn-primary">Редагувати</a>
+                        <a asp-controller="Job" asp-action="EditJob" asp-route-id="@job.Id" class="btn btn-primary">Редагувати</a>
                     }
                     else
                     {

@@ -43,7 +43,7 @@ namespace Helper.Domain.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Helper.Domain.Entities.Job", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.JobModels", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -175,7 +175,7 @@ namespace Helper.Domain.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Helper.Domain.Entities.Job", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.JobModels", b =>
                 {
                     b.HasOne("Helper.Domain.Entities.User", "Assignee")
                         .WithMany()
@@ -203,7 +203,7 @@ namespace Helper.Domain.Migrations
 
             modelBuilder.Entity("Helper.Domain.Entities.Message", b =>
                 {
-                    b.HasOne("Helper.Domain.Entities.Job", "Job")
+                    b.HasOne("Helper.Domain.Entities.JobModels", "JobModels")
                         .WithMany("Messages")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -221,14 +221,14 @@ namespace Helper.Domain.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Job");
+                    b.Navigation("JobModels");
 
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("Helper.Domain.Entities.Job", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.JobModels", b =>
                 {
                     b.Navigation("Messages");
                 });

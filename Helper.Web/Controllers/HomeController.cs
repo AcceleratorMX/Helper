@@ -3,7 +3,6 @@ using Helper.Domain.Entities;
 using Helper.Domain.Entities.Abstract;
 using Helper.Domain.Repositories.Abstract;
 using Helper.Web.Models.Home;
-using Helper.Web.Models.Message;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Helper.Web.Controllers;
@@ -74,7 +73,4 @@ public class HomeController : Controller
             .Reverse()
             .ToList();
     }
-    
-    
-
 }
