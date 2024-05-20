@@ -10,7 +10,7 @@ public class Message : Entity<long>
     [Required(ErrorMessage = "Введіть текст повідомлення")]
     public string Text { get; set; } = string.Empty;
 
-    public bool IsRead { get; set; }
+    public string Status { get; set; } = MessageStatuses.Sent.ToString();
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public int JobId { get; set; }
 

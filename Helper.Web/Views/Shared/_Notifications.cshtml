@@ -1,0 +1,24 @@
+@model IEnumerable<NotificationViewModel>
+
+@{
+    ViewData["Title"] = "";
+}
+    <ul>
+        @foreach (var notification in Model)
+        {
+            <li>
+                <p>Завдання: @notification.JobTitle</p>
+                <p>Відправник: @notification.SenderName</p>
+                <p>Дата відправлення: @notification.SentAt.ToString("HH:mm dd.MM.yyyy")</p>
+                <form method="post" asp-action="ApproveMessage" asp-controller="Message">
+                    <input type="hidden" name="messageId" value="@notification.MessageId" />
+                    <button type="submit" class="btn btn-success">Підтвердити</button>
+                </form>
+                <form method="post" asp-action="RejectMessage" asp-controller="Message">
+                    <input type="hidden" name="messageId" value="@notification.MessageId" />
+                    <button type="submit" class="btn btn-danger">Відхилити</button>
+                </form>
+            </li>
+        }
+    </ul>
+}

@@ -1,31 +1,47 @@
-﻿@{
+﻿@using Helper.Web.Models.Home
+@{
 ViewData["Title"] = "Головна";
 var currentUserId = ViewData["CurrentUserId"] as Guid?;
+var notifications = ViewData["Notifications"] as List<NotificationViewModel>;
+
 }
 
 <ul>
     @foreach (var job in Model.Jobs)
     {
-    <li>
-        <article>
-            <h2>@job.Title</h2>
-            <p>@job.Description</p>
-            <p>Місцезнаходження: @job.Location</p>
-            <p>Категорія: @job.Category.Title</p>
-            <p>#@job.Id</p>
-            <p>Дата створення: @job.CreatedAt.ToString()</p>
-            @if (User.Identity!.IsAuthenticated)
-            {
-            if (job.CreatorId == currentUserId)
-            {
-            <a asp-controller="Job" asp-action="Edit" asp-route-id="@job.Id" class="btn btn-primary">Редагувати</a>
-            }
-            else
-            {
-            <a asp-controller="Message" asp-action="CreateMessage" asp-route-jobId="@job.Id" class="btn btn-primary">Відгукнутись</a>
-            }
-            }
-        </article>
-    </li>
+        <li>
+            <article>
+                <h2>@job.Title</h2>
+                <p>@job.Description</p>
+                <p>Місцезнаходження: @job.Location</p>
+                <p>Категорія: @job.Category.Title</p>
+                <p>#@job.Id</p>
+                <p>Дата створення: @job.CreatedAt.ToString("dd.MM.yyyy")</p>
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    if (job.CreatorId == currentUserId)
+                    {
+                        <a asp-controller="Job" asp-action="Edit" asp-route-id="@job.Id" class="btn btn-primary">Редагувати</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Message" asp-action="CreateMessage" asp-route-jobId="@job.Id" class="btn btn-primary">Відгукнутись</a>
+                    }
+                }
+            </article>
+        </li>
     }
 </ul>
+
+<p>---------------------------------------------------------------------------------------------------</p>
+<p>Сповіщення</p>
+<p>---------------------------------------------------------------------------------------------------</p>
+
+
+<div>
+    @if (notifications != null && notifications.Any())
+    {
+        <h2>Сповіщення</h2>
+        @await Html.PartialAsync("_Notifications", notifications)
+    }
+</div>

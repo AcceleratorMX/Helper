@@ -3,6 +3,7 @@ using Helper.Domain.Repositories.Abstract;
 using Helper.Web.Models.Message;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Helper.Domain.Entities.Abstract;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Helper.Web.Controllers;
@@ -61,6 +62,39 @@ public class MessageController : Controller
         };
 
         await _messageRepository.CreateAsync(message);
+
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ApproveMessage(long messageId)
+    {
+        var message = await _messageRepository.GetByIdAsync(messageId);
+
+        message.Status = MessageStatuses.Approved.ToString();
+        await _messageRepository.UpdateAsync(message);
+
+        var job = await _jobRepository.GetByIdAsync(message.JobId);
+
+        job.Status = JobStatuses.InProgress.ToString();
+        job.AssigneeId = message.SenderId;
+        await _jobRepository.UpdateAsync(job);
+
+        var user = await _userRepository.GetByIdAsync(message.SenderId);
+
+        user.AcceptedJobs++;
+        await _userRepository.UpdateAsync(user);
+
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RejectMessage(long messageId)
+    {
+        var message = await _messageRepository.GetByIdAsync(messageId);
+
+        message.Status = MessageStatuses.Rejected.ToString();
+        await _messageRepository.UpdateAsync(message);
 
         return RedirectToAction("Index", "Home");
     }

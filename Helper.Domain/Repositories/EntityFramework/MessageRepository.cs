@@ -24,8 +24,6 @@ public class MessageRepository(HelperDbContext context) : IRepository<Message, l
             throw new Exception("Sender and receiver cannot be the same");
         }
         
-
-        
         await context.Messages.AddAsync(entity);
         await context.SaveChangesAsync();
     }
@@ -40,13 +38,7 @@ public class MessageRepository(HelperDbContext context) : IRepository<Message, l
     public Task DeleteAsync(long id)
     {
         var message = context.Messages.Find(id);
-        if (message == null)
-        {
-            throw new Exception($"Message with id {id} not found");
-        }
-        
-        context.Messages.Remove(message);
-        
+        context.Messages.Remove(message ?? throw new Exception($"Message with id {id} not found"));
         return context.SaveChangesAsync();
     }
 }
