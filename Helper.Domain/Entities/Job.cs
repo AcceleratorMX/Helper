@@ -40,7 +40,7 @@ public class Job : Entity<int>
     public User? Assignee { get; set; }
 
     [Display(Name = "Категорія")]
-    [Required(ErrorMessage = "Вкажіть категорію!")]
+    [Range(1, int.MaxValue, ErrorMessage = "Оберіть категорію!")]
     public int CategoryId { get; set; }
 
     [ForeignKey(nameof(CategoryId))]

@@ -6,6 +6,7 @@ using Helper.Web.Models.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Helper.Web.Controllers;
 
@@ -55,6 +56,9 @@ public class AccountController : Controller
             ModelState.AddModelError(nameof(LoginViewModel.Password), "Некоректний пароль");
             return View("Login", model);
         }
+        
+        user.LastLoginDate = DateTime.Now;;
+        await _userRepository.UpdateAsync(user);
 
         await AuthenticateAsync(user);
         return RedirectToAction("Index", "Home");
@@ -109,4 +113,28 @@ public class AccountController : Controller
 
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Profile()
+    {
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var user = await _userRepository.GetByIdAsync(userId);
+
+        var model = new ProfileViewModel
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            City = user.City,
+            RegisterDate = user.RegisterDate,
+            LastLoginDate = user.LastLoginDate,
+            CreatedJobs = user.CreatedJobs,
+            AcceptedJobs = user.AcceptedJobs,
+            CompletedJobs = user.CompletedJobs,
+            FailedJobs = user.FailedJobs
+        };
+
+        return View(model);
+    }
+    
 }

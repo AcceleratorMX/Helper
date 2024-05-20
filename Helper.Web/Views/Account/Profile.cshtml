@@ -1,0 +1,55 @@
+@model ProfileViewModel
+
+@{
+    ViewBag.Title = "Профіль користувача";
+}
+
+<table>
+    <thead>
+    <tr>
+        <th>Інформація про акаунт</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th>Ім'я:</th>
+        <td>@Model.Username</td>
+    </tr>
+    <tr>
+        <th>Е-пошта:</th>
+        <td>@Model.Email</td>
+    </tr>
+    <tr>
+        <th>Місто:</th>
+        <td>@Model.City</td>
+    </tr>
+    <tr>
+        <th>Дата реєстрації:</th>
+        <td>@Model.RegisterDate.ToString("dd.MM.yyyy HH:mm")</td>
+    </tr>
+    @if (User.Identity!.IsAuthenticated)
+    {
+        <tr>
+            <th>Дата останнього входу:</th>
+            <td>@Model.LastLoginDate.ToString("dd.MM.yyyy HH:mm")</td>
+        </tr>
+    }
+    <tr>
+        <th>Завдань створено:</th>
+        <td>@Model.CreatedJobs</td>
+    </tr>
+    <tr>
+        <th>Завдань прийнято:</th>
+        <td>@Model.AcceptedJobs</td>
+    </tr>
+    <tr>
+        <th>Завдань виконано:</th>
+        <td>@Model.CompletedJobs</td>
+    </tr>
+    <tr>
+        <th>Завдань відмінено:</th>
+        <td>@Model.FailedJobs</td>
+    </tr>
+    </tbody>
+</table>
+

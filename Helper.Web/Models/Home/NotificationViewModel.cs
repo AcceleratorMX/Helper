@@ -6,6 +6,9 @@ public class NotificationViewModel
 {
     public long MessageId { get; set; }
     
+    [Display(Name = "Вміст")]
+    public string Content { get; set; } = null!;
+    
     [Display(Name = "Відправник")]
     public string SenderName { get; set; } = null!;
     

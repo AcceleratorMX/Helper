@@ -8,6 +8,7 @@
         {
             <li>
                 <p>Завдання: @notification.JobTitle</p>
+                <p>Вміст: @notification.Content</p>
                 <p>Відправник: @notification.SenderName</p>
                 <p>Дата відправлення: @notification.SentAt.ToString("HH:mm dd.MM.yyyy")</p>
                 <form method="post" asp-action="ApproveMessage" asp-controller="Message">

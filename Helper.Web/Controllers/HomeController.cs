@@ -67,6 +67,7 @@ public class HomeController : Controller
                 MessageId = m.Id,
                 SenderName = _userRepository.GetByIdAsync(m.SenderId).Result.Username,
                 JobTitle = _jobRepository.GetByIdAsync(m.JobId).Result.Title,
+                Content = _messageRepository.GetByIdAsync(m.Id).Result.Text,
                 SentAt = m.CreatedAt,
                 Status = m.Status.ToString()
             })

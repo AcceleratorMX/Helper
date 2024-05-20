@@ -20,15 +20,12 @@ public class UserRepository(HelperDbContext context) : IRepository<User, Guid>
 
     public async Task CreateAsync(User entity)
     {
-        entity.LastLoginDate = DateTime.UtcNow;
-        
         await context.Users.AddAsync(entity);
         await context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(User entity)
     {
-        entity.LastLoginDate = DateTime.UtcNow;
         context.Users.Update(entity);
         await context.SaveChangesAsync();
     }
