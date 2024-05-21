@@ -117,9 +117,20 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> Profile()
     {
-        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var user = await _userRepository.GetByIdAsync(userId);
+        if (user == null)
+        {
+            throw new Exception($"User with id {userId} not found");
+        }
+        
+        var model = ProfileViewModel(user);
 
+        return View(model);
+    }
+
+    private static ProfileViewModel ProfileViewModel(User user)
+    {
         var model = new ProfileViewModel
         {
             Id = user.Id,
@@ -133,8 +144,48 @@ public class AccountController : Controller
             CompletedJobs = user.CompletedJobs,
             FailedJobs = user.FailedJobs
         };
-
-        return View(model);
+        return model;
     }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View("Profile", model);
+        }
+        
+        var user = await _userRepository.GetByIdAsync(model.Id);
+        if (user == null)
+        {
+            throw new Exception($"User with id {model.Id} not found");
+        }
     
+        if (!string.IsNullOrWhiteSpace(model.Email) && model.Email != user.Email)
+        {
+            var existingUser = (await _userRepository.GetAllAsync())
+                .FirstOrDefault(u => u.Email == model.Email);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError(nameof(model.Email), "Така адреса вже існує");
+                return View("Profile", ProfileViewModel(await _userRepository.GetByIdAsync(model.Id)));
+            }
+        }
+        
+        if(model.Email != user.Email)
+        {
+            user.Email = model.Email;
+            TempData["SuccessMessage"] = "Електронна пошта оновлена";
+        }
+        
+        if (model.City != user.City)
+        {
+            user.City = model.City;
+            TempData["SuccessMessage"] = "Місто оновлено";
+        }
+        
+        await _userRepository.UpdateAsync(user);
+        return RedirectToAction("Profile");
+    }
 }

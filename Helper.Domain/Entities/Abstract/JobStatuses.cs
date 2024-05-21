@@ -9,7 +9,5 @@ public enum JobStatuses
     [Display(Name = "Виконується")]
     InProgress,
     [Display(Name = "Завершено")]
-    Completed,
-    [Display(Name = "Відмінено")]
-    Canceled
+    Completed
 }

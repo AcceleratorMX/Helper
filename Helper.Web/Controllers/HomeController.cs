@@ -13,7 +13,7 @@ public class HomeController : Controller
     private readonly IRepository<Job, int> _jobRepository;
     private readonly IRepository<Message, long> _messageRepository;
     private readonly IRepository<User, Guid> _userRepository;
-
+    
     public HomeController(ILogger<HomeController> logger, IRepository<Job, int> jobRepository, IRepository<Message, long> messageRepository, IRepository<User, Guid> userRepository)
     {
         _logger = logger;
@@ -21,7 +21,7 @@ public class HomeController : Controller
         _messageRepository = messageRepository;
         _userRepository = userRepository;
     }
-
+    
     public async Task<IActionResult> Index()
     {
         var model = new HomeViewModel
@@ -42,7 +42,6 @@ public class HomeController : Controller
                 })
                 .Reverse()
                 .ToList()
-                
         };
 
         if (User.Identity!.IsAuthenticated)

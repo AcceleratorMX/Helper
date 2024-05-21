@@ -129,8 +129,6 @@ public class JobController : Controller
         return View();
     }
 
-
-    
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ConfirmCompletion(int id)
@@ -162,9 +160,4 @@ public class JobController : Controller
 
         return RedirectToAction("AllJobs", "Job");
     }
-
-
-
-
-
 }

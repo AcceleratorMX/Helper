@@ -20,13 +20,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     {
         options.LoginPath = "/account/login";
         options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.ExpireTimeSpan = TimeSpan.FromDays(1);
         options.AccessDeniedPath = "/account/login";
         options.SlidingExpiration = true;
     });
 builder.Services.AddAuthorization();
-
-// Startup.cs або Program.cs
 
 builder.Services.AddScoped<IRepository<User, Guid>, UserRepository>();
 builder.Services.AddScoped<IRepository<Category, int>, CategoryRepository>();

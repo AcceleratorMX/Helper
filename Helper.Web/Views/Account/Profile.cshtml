@@ -53,3 +53,52 @@
     </tbody>
 </table>
 
+<h3>Змінити інформацію</h3>
+
+<h4>Змінити електронну адресу та місто</h4>
+<form asp-action="UpdateProfile" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Email">Електронна адреса:</label>
+        <input asp-for="Email" type="email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="City">Місто:</label>
+        <input asp-for="City" class="form-control" />
+        <span asp-validation-for="City" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Зберегти</button>
+    @if (TempData["SuccessMessage"] != null)
+    {
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+    }
+</form>
+
+
+
+
+@* <h4>Змінити пароль</h4> *@
+@* <form asp-action="ChangePassword" method="post"> *@
+@*     <input type="hidden" asp-for="Id" /> *@
+@*     <div class="form-group"> *@
+@*         <label asp-for="OldPassword">Старий пароль:</label> *@
+@*         <input type="password" asp-for="OldPassword" class="form-control" /> *@
+@*         <span asp-validation-for="OldPassword" class="text-danger"></span> *@
+@*     </div> *@
+@*     <div class="form-group"> *@
+@*         <label asp-for="Password">Новий пароль:</label> *@
+@*         <input type="password" asp-for="Password" class="form-control" /> *@
+@*         <span asp-validation-for="Password" class="text-danger"></span> *@
+@*     </div> *@
+@*     <div class="form-group"> *@
+@*         <label asp-for="RepeatPassword">Повторіть новий пароль:</label> *@
+@*         <input type="password" asp-for="RepeatPassword" class="form-control" /> *@
+@*         <span asp-validation-for="RepeatPassword" class="text-danger"></span> *@
+@*     </div> *@
+@*     <button type="submit" class="btn btn-primary">Змінити пароль</button> *@
+@* </form> *@
+
+

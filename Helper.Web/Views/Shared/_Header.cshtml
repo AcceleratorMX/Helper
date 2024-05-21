@@ -9,7 +9,7 @@
                 @if (User.Identity!.IsAuthenticated)
                 {
                     <button class="main-menu_button">
-                        <a  asp-controller="Job" asp-action="CreateJob">Нове оголошення</a>
+                        <a asp-controller="Job" asp-action="CreateJob">Нове оголошення</a>
                     </button>
                     
                     <div class="main-menu_container">
@@ -18,11 +18,12 @@
                             <li class="main-menu_item">
                                 <a asp-controller="Account" asp-action="Profile">Профіль</a>
                             </li>
-                            <li class="main-menu_item">Повідомлення</li>
                             <li class="main-menu_item">
                                 <a asp-controller="Job" asp-action="AllJobs">Оголошення</a>
                             </li>
-                            <li class="main-menu_item"><a asp-controller="Account" asp-action="Logout">Вийти</a></li>
+                            <li class="main-menu_item">
+                                <a asp-controller="Account" asp-action="Logout">Вийти</a>
+                            </li>
                         </ul>
                     </div>
 
