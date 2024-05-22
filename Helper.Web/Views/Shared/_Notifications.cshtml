@@ -1,9 +1,10 @@
 @model IEnumerable<NotificationViewModel>
 
-@{
-    ViewData["Title"] = "";
-}
-    <ul>
+<div class="notifications_panel">
+    <h2 class="notifications_title">Сповіщення</h2>
+</div>
+
+<ul class="cards_container">
         @foreach (var notification in Model)
         {
             <li>

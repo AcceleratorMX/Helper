@@ -1,77 +1,228 @@
 @import url(reset.css);
 
+:root {
+    --primary-color: rgb(192, 221, 255);
+    --links-hover-color: #6c757d;
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --border-raadius: 10%;
+    --elements-color:#88beff;
+}
+
 html,
 body {
     height: 100%;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
-    line-height: 1.6;
+    line-height: 1.6rem;
     color: #333;
-    background-color: rgba(217, 235, 255, 0.52);
+    background-color: var(--primary-color);
 }
-
 .wrapper {
     display: flex;
     flex-direction: column;
     min-height: 100%;
+    margin: 0 auto;
 }
 
-
+/* #region header */
 .header {
-  width: 100%;
+    width: 100%;
+    background-color: var(--light-color);
 }
 
 .header_container {
-  max-width: 90vw;
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-  margin: 0 auto;
+    margin: 0 auto;
+    max-width: 90vw;
+}
+
+.header_button {
+    padding: 0.5rem 0;
+    background-color: var(--info-color);
+    color: var(--light-color);
+    border: none;
+    border-radius: 0.3rem;
+    cursor: pointer;
+}
+
+.header_left-side {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
 }
 
 .logo_container {
-    margin: 20px 0 20px 0;
+    max-width: 7rem;
+}
+
+.logo:hover {
+    border:1px solid transparent;
 }
 
 .logo {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
+    display: inline-block;
 }
-
 
 .nav_items {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
-  width: 400px;
-    
+  gap: 2rem;
 }
 
-.main-menu_container {
-    position: relative;
-    cursor: pointer;
-    border: 1px solid #000;
-    width: 150px;
+.navbar {
 }
 
 .main-menu {
+    padding: 0.8rem 0;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+
+}
+
+.main-menu_greeting {
+    display: flex;
+    align-items: center;
+}
+
+.main-menu_username {
+    font-size: 1.2rem;
+    font-weight: bold;
+    max-width: 8rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    margin: 0 0.3rem;
+}
+
+.main-menu_items {
     position: absolute;
     display: none;
-}
-
-.main-menu_button {
-    padding: 10px;
+    top: 3.22rem;
+    background-color: var(--light-color);
     text-align: center;
+    border-radius: var(--border-raadius);
+    z-index: 2;
 }
 
-.main-menu_container:hover .main-menu {
+.main-menu:hover .main-menu_items {
     display: block;
 }
 
+.main-menu_item {
+    padding: 0.5rem 2rem;
+}
 
+.header_links {
+    font-weight: bold;
+    font-size: 0.9rem;   
+}
+
+.header_links:hover,
+.main-menu_item a:hover {
+    color: var(--links-hover-color);
+    text-decoration: underline;
+}
+
+.login_links {
+    padding: 0.9rem 0;
+    gap: 2rem;
+    margin-left: 7rem;
+}
+
+.login_link:not(:first-child) {
+    margin-left: 2rem;
+}
+
+/* #endregion */
+
+/* #region main */
 .main {
     flex: 1 1 auto;
+    margin: 0 auto;
 }
+.main_container {
+    border: 1px solid red;
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.notifications_container {
+    border-radius: var(--border-raadius);
+    max-width: 20vw;
+    width: 100%;
+    right: 0;
+    position: fixed;
+    transition: transform 300ms;
+    transform: translateX(100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.notifications_container:target {
+    transform: translateX(-10%);
+}
+
+.notifications_indicator {
+    position: absolute;
+    min-width: 1rem;
+    min-height: 1rem;
+    right: 105%;
+    top: -2.5%;
+    z-index: 1;
+    color: var(--danger-color);
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: var(--elements-color);
+    padding: 1rem;
+    border-radius: 50%;
+    border: 0.2rem solid var(--light-color);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: right 300ms;
+}
+
+.notifications_container:target .notifications_indicator {
+    right: 90%;
+}
+
+.notifications_panel {
+    color: var(--light-color);
+    background-color: var(--elements-color);
+    border-radius: 1rem;
+    border: 0.2rem solid var(--light-color);
+    margin-bottom: 1rem;
+}
+
+.notifications_title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+/* #region notifications page */
+
+
+
+/* #endregion */
+
+
+
+/* #endregion */
+
+
 
 
 .footer {

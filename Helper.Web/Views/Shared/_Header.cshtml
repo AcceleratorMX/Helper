@@ -1,40 +1,52 @@
 <header class="header">
     <nav class="header_container">
-        <div class="logo_container">
-            <a class="logo" asp-area="" asp-controller="Home" asp-action="Index">Helper</a>
+        <div class="header_left-side">
+            <div class="logo_container">
+                <a class="logo" asp-area="" asp-controller="Home" asp-action="Index">Helper</a>
+            </div>
+            @if (User.Identity!.IsAuthenticated && User.Identity.Name == "admin")
+            {
+                <button class="header_links">
+                    <a asp-controller="Job" asp-action="CreateJob">Панель керування</a>
+                </button>
+            }
         </div>
-        
+
         <div class="navbar">
             <div class="nav_items">
                 @if (User.Identity!.IsAuthenticated)
                 {
-                    <button class="main-menu_button">
+                    <button class="header_links">
                         <a asp-controller="Job" asp-action="CreateJob">Нове оголошення</a>
                     </button>
-                    
+
                     <div class="main-menu_container">
-                        <button class="nav_link main-menu_button">Привіт, @User.Identity.Name!</button>
                         <ul class="main-menu">
-                            <li class="main-menu_item">
-                                <a asp-controller="Account" asp-action="Profile">Профіль</a>
-                            </li>
-                            <li class="main-menu_item">
-                                <a asp-controller="Job" asp-action="AllJobs">Оголошення</a>
-                            </li>
-                            <li class="main-menu_item">
-                                <a asp-controller="Account" asp-action="Logout">Вийти</a>
-                            </li>
+                            <span class="main-menu_greeting">Привіт, <span class="main-menu_username" title="@User.Identity.Name"> @User.Identity.Name</span> !</span>
+                            <div class="main-menu_items">
+                                <li class="main-menu_item">
+                                    <a asp-controller="Account" asp-action="Profile">Профіль</a>
+                                </li>
+                                <li class="main-menu_item">
+                                    <a asp-controller="Job" asp-action="AllJobs">Оголошення</a>
+                                </li>
+                                <li class="main-menu_item">
+                                    <a asp-controller="Account" asp-action="Logout">Вийти</a>
+                                </li>
+                            </div>
+
                         </ul>
                     </div>
-
                 }
                 else
                 {
-                    <a class="nav_link" asp-controller="Account" asp-action="Login">Увійти</a>
-                    <a class="nav_link" asp-controller="Account" asp-action="Register">Реєстрація</a>
+                    <div class="login_links">
+                        <a class="header_links login_link" asp-controller="Account" asp-action="Login">Увійти</a>
+                        <a class="header_links login_link" asp-controller="Account" asp-action="Register">Реєстрація</a>
+                    </div>
+                    
                 }
             </div>
         </div>
     </nav>
 </header>
-

@@ -7,30 +7,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Helper.Web.Controllers;
 
-public class HomeController : Controller
+public class HomeController(
+    IRepository<Job, int> jobRepository,
+    IRepository<Message, long> messageRepository,
+    IRepository<User, Guid> userRepository,
+    IRepository<Category, int> categoryRepository)
+    : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly IRepository<Job, int> _jobRepository;
-    private readonly IRepository<Message, long> _messageRepository;
-    private readonly IRepository<User, Guid> _userRepository;
-    private readonly IRepository<Category, int> _categoryRepository;
-    
-    public HomeController(ILogger<HomeController> logger, IRepository<Job, int> jobRepository, IRepository<Message, long> messageRepository, IRepository<User, Guid> userRepository, IRepository<Category, int> categoryRepository)
-    {
-        _logger = logger;
-        _jobRepository = jobRepository;
-        _messageRepository = messageRepository;
-        _userRepository = userRepository;
-        _categoryRepository = categoryRepository;
-    }
-    
     public async Task<IActionResult> Index(string? category = null)
     {
-        var categories = await _categoryRepository.GetAllAsync();
-        ViewData["Categories"] = categories.Select(c => c.Title).ToList();
+        await GetCategories();
 
-        var jobs = (await _jobRepository.GetAllAsync())
-            .Where(job => job.Status == JobStatuses.Active.ToString() && (category == null || category == "1" || job.Category.Title == category))
+        var jobs = (await jobRepository.GetAllAsync())
+            .Where(job => job.Status == JobStatuses.Active.ToString() && (category == null || 
+                                                                          category == "1" || 
+                                                                          job.Category!.Title == category))
             .Select(job => new Job
             {
                 Id = job.Id,
@@ -62,17 +53,23 @@ public class HomeController : Controller
 
         return View(model);
     }
-    
+
+    private async Task GetCategories()
+    {
+        var categories = await categoryRepository.GetAllAsync();
+        ViewData["Categories"] = categories.Select(c => c.Title).ToList();
+    }
+
     private async Task<List<NotificationViewModel>> GetNotificationsAsync(Guid userId)
     {
-        return (await _messageRepository.GetAllAsync())
+        return (await messageRepository.GetAllAsync())
             .Where(m => m.ReceiverId == userId && m.Status == MessageStatuses.Sent.ToString())
             .Select(m => new NotificationViewModel
             {
                 MessageId = m.Id,
-                SenderName = _userRepository.GetByIdAsync(m.SenderId).Result.Username,
-                JobTitle = _jobRepository.GetByIdAsync(m.JobId).Result.Title,
-                Content = _messageRepository.GetByIdAsync(m.Id).Result.Text,
+                SenderName = userRepository.GetByIdAsync(m.SenderId).Result.Username,
+                JobTitle = jobRepository.GetByIdAsync(m.JobId).Result.Title,
+                Content = messageRepository.GetByIdAsync(m.Id).Result.Text,
                 SentAt = m.CreatedAt,
                 Status = m.Status.ToString()
             })

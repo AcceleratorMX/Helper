@@ -1,58 +1,61 @@
 ﻿@{
-ViewData["Title"] = "Головна";
-var currentUserId = ViewData["CurrentUserId"] as Guid?;
-var notifications = ViewData["Notifications"] as List<NotificationViewModel>;
-var categories = ViewData["Categories"] as List<string>;
-
+    ViewData["Title"] = "Головна";
+    var currentUserId = ViewData["CurrentUserId"] as Guid?;
+    var notifications = ViewData["Notifications"] as List<NotificationViewModel>;
+    var categories = ViewData["Categories"] as List<string>;
 }
 
-<form asp-controller="Home" asp-action="Index" method="get">
-    <select name="category" onchange="this.form.submit()">
-        <option value="" hidden>Категорії</option>
-        <option value="1">Усі</option>
-        @foreach (var category in categories!)
+
+<div class="main-content_container">
+    <form asp-controller="Home" asp-action="Index" method="get" class="select-list">
+        <select name="category" onchange="this.form.submit()">
+            <option value="" hidden>Категорії</option>
+            <option value="1">Усі</option>
+            @foreach (var category in categories!)
+            {
+                <option value="@category">@category</option>
+            }
+        </select>
+    </form>
+    <br>
+    <ul>
+        @foreach (var job in Model.Jobs)
         {
-        <option value="@category">@category</option>
+            <li>
+                <article>
+                    <h2>@job.Title</h2>
+                    <p>@job.Description</p>
+                    <p>Місцезнаходження: @job.Location</p>
+                    <p>Категорія: @job.Category.Title</p>
+                    <p>#@job.Id</p>
+                    <p>Дата створення: @job.CreatedAt.ToString("dd.MM.yyyy")</p>
+                    @if (User.Identity!.IsAuthenticated)
+                    {
+                        if (job.CreatorId == currentUserId)
+                        {
+                            <a asp-controller="Job" asp-action="EditJob" asp-route-id="@job.Id" class="btn btn-primary">Редагувати</a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Message" asp-action="CreateMessage" asp-route-jobId="@job.Id" class="btn btn-primary">Відгукнутись</a>
+                        }
+                    }
+                </article>
+            </li>
         }
-    </select>
-</form>
+    </ul>
+</div>
+
+
 <br>
-<ul>
-    @foreach (var job in Model.Jobs)
-    {
-        <li>
-            <article>
-                <h2>@job.Title</h2>
-                <p>@job.Description</p>
-                <p>Місцезнаходження: @job.Location</p>
-                <p>Категорія: @job.Category.Title</p>
-                <p>#@job.Id</p>
-                <p>Дата створення: @job.CreatedAt.ToString("dd.MM.yyyy")</p>
-                @if (User.Identity!.IsAuthenticated)
-                {
-                    if (job.CreatorId == currentUserId)
-                    {
-                        <a asp-controller="Job" asp-action="EditJob" asp-route-id="@job.Id" class="btn btn-primary">Редагувати</a>
-                    }
-                    else
-                    {
-                        <a asp-controller="Message" asp-action="CreateMessage" asp-route-jobId="@job.Id" class="btn btn-primary">Відгукнутись</a>
-                    }
-                }
-            </article>
-        </li>
-    }
-</ul>
-
-<p>---------------------------------------------------------------------------------------------------</p>
-<p>Сповіщення</p>
-<p>---------------------------------------------------------------------------------------------------</p>
 
 
-<div>
+<div class="notifications_container" id="notifications_page">
     @if (notifications != null && notifications.Any())
     {
-        <h2>Сповіщення</h2>
+        <a class="notifications_indicator" href="#notifications_page">110</a>
+
+
         @await Html.PartialAsync("_Notifications", notifications)
     }
 </div>
