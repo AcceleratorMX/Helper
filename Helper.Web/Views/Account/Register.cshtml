@@ -3,27 +3,35 @@
     ViewData["Title"] = "Реєстрація";
 }
 
-<form asp-controller="Account" asp-action="Register" method="post">
-    <div>
-        <label asp-for="Username">Логін</label>
-        <input asp-for="Username" type="text" placeholder="Введіть ім'я користувача (логін)" />
-        <span asp-validation-for="Username"></span>
-    </div>
-    <div>
-        <label asp-for="Password">Пароль</label>
-        <input asp-for="Password" type="password" value="@Model.Password" placeholder="Введіть пароль" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <div>
-        <label asp-for="RepeatPassword">Підтвердження пароля</label>
-        <input asp-for="RepeatPassword" type="password" value="@Model.RepeatPassword" placeholder="Підтвердіть пароль" />
-        <span asp-validation-for="RepeatPassword"></span>
-    </div>
-    <div>
-        <button type="submit">Зареєструватися</button>
-    </div>
-    <div>
-        <a asp-controller="Account" asp-action="Login">Увійти</a>
-    </div>
-    <div>@ViewBag.Error</div>
-</form>
+<div class="login-page_container">
+
+    <form asp-controller="Account" asp-action="Register" method="post" class="form_container">
+        <h1 class="login_title">Реєстрація</h1>
+        <div class="input_container">
+            <label asp-for="Username" class="input_label">Логін</label>
+            <input asp-for="Username" type="text" class="input_field" placeholder="Введіть ім'я користувача (логін)"/>
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+        <hr class="card_line">
+        <div class="input_container">
+            <label asp-for="Password" class="input_label">Пароль</label>
+            <input asp-for="Password" type="password" class="input_field" value="@Model.Password" placeholder="Введіть пароль"/>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <hr class="card_line">
+        <div class="input_container">
+            <label asp-for="RepeatPassword" class="input_label">Підтвердження пароля</label>
+            <input asp-for="RepeatPassword" type="password" value="@Model.RepeatPassword" class="input_field" placeholder="Підтвердіть пароль"/>
+            <span asp-validation-for="RepeatPassword" class="text-danger"></span>
+        </div>
+        <hr class="card_line">
+        <div class="form-button_container">
+            <button type="submit" class="form_button-submit">Зареєструватися</button>
+        </div>
+        <span class="login-page_text">
+            Вже зареєстровані? 
+            <a asp-controller="Account" asp-action="Login" class="login-page_link">Увійти</a>
+        </span>
+    </form>
+</div>
+

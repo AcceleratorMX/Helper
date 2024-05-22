@@ -8,38 +8,58 @@
 
 <div class="main-content_container">
     <form asp-controller="Home" asp-action="Index" method="get" class="select-list">
-        <select name="category" onchange="this.form.submit()">
-            <option value="" hidden>Категорії</option>
-            <option value="1">Усі</option>
+        <select name="category" onchange="this.form.submit()" class="select-list_item">
+            <option value="" hidden class="select-list_item">Категорії</option>
+            <option value="1" class="select-list_item">Усі</option>
             @foreach (var category in categories!)
             {
-                <option value="@category">@category</option>
+                <option value="@category" class="select-list_item">@category</option>
             }
         </select>
     </form>
     <br>
-    <ul>
+    <ul class="cards_container main-cards">
         @foreach (var job in Model.Jobs)
         {
-            <li>
+            <li class="card">
                 <article>
-                    <h2>@job.Title</h2>
-                    <p>@job.Description</p>
-                    <p>Місцезнаходження: @job.Location</p>
-                    <p>Категорія: @job.Category.Title</p>
-                    <p>#@job.Id</p>
-                    <p>Дата створення: @job.CreatedAt.ToString("dd.MM.yyyy")</p>
-                    @if (User.Identity!.IsAuthenticated)
-                    {
-                        if (job.CreatorId == currentUserId)
-                        {
-                            <a asp-controller="Job" asp-action="EditJob" asp-route-id="@job.Id" class="btn btn-primary">Редагувати</a>
-                        }
-                        else
-                        {
-                            <a asp-controller="Message" asp-action="CreateMessage" asp-route-jobId="@job.Id" class="btn btn-primary">Відгукнутись</a>
-                        }
-                    }
+                    <div class="card_header main-card_header">
+                        <div class="card_title">
+                            <h2>@job.Title</h2></div>
+                        <span class="card_job-id">#@job.Id</span>
+                    </div>
+
+                    <div class="main-card_main">
+                        <div class="card_sidebar">
+                            <span class="card_category">@job.Category.Title</span>
+                            <div class="card_line-vertical"></div>
+                        </div>
+                        
+                        <div class="card_content">
+                            <p class="card_content-text">@job.Description</p>
+                        </div>
+                    </div>
+                    <hr class="card_line">
+                    <div class="card_footer">
+                        <div class="card_about main-card_about">
+                            <span class="card_location">@job.Location</span>
+                            <span class="card_date">@job.CreatedAt.ToString("dd.MM.yyyy")</span>
+                        </div>
+                        <hr class="card_line">
+                        <div class="main-card_button">
+                            @if (User.Identity!.IsAuthenticated)
+                            {
+                            if (job.CreatorId == currentUserId)
+                            {
+                            <a asp-controller="Job" asp-action="EditJob" asp-route-id="@job.Id" class="notifications-card_button btn-warning">Редагувати</a>
+                            }
+                            else
+                            {
+                            <a asp-controller="Message" asp-action="CreateMessage" asp-route-jobId="@job.Id" class="notifications-card_button btn-primary">Відгукнутись</a>
+                            }
+                            }
+                        </div>
+                    </div>
                 </article>
             </li>
         }
@@ -48,9 +68,9 @@
 
 
 <br>
-<a class="notifications_indicator" href="#notifications_page">110</a>
 
-<div class="notifications_container" id="notifications_page">
+
+
     @if (notifications != null && notifications.Any())
     {
 
@@ -58,4 +78,3 @@
 
         @await Html.PartialAsync("_Notifications", notifications)
     }
-</div>
