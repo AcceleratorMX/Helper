@@ -6,7 +6,7 @@ using Helper.Web.Models.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+
 
 namespace Helper.Web.Controllers;
 
@@ -56,8 +56,9 @@ public class AccountController : Controller
             ModelState.AddModelError(nameof(LoginViewModel.Password), "Некоректний пароль");
             return View("Login", model);
         }
-        
-        user.LastLoginDate = DateTime.Now;;
+
+        user.LastLoginDate = DateTime.Now;
+        ;
         await _userRepository.UpdateAsync(user);
 
         await AuthenticateAsync(user);
@@ -123,7 +124,7 @@ public class AccountController : Controller
         {
             throw new Exception($"User with id {userId} not found");
         }
-        
+
         var model = ProfileViewModel(user);
 
         return View(model);
@@ -155,13 +156,13 @@ public class AccountController : Controller
         {
             return View("Profile", model);
         }
-        
+
         var user = await _userRepository.GetByIdAsync(model.Id);
         if (user == null)
         {
             throw new Exception($"User with id {model.Id} not found");
         }
-    
+
         if (!string.IsNullOrWhiteSpace(model.Email) && model.Email != user.Email)
         {
             var existingUser = (await _userRepository.GetAllAsync())
@@ -172,20 +173,57 @@ public class AccountController : Controller
                 return View("Profile", ProfileViewModel(await _userRepository.GetByIdAsync(model.Id)));
             }
         }
-        
-        if(model.Email != user.Email)
+
+        if (model.Email != user.Email)
         {
             user.Email = model.Email;
             TempData["SuccessMessage"] = "Електронна пошта оновлена";
         }
-        
+
         if (model.City != user.City)
         {
             user.City = model.City;
             TempData["SuccessMessage"] = "Місто оновлено";
         }
-        
+
         await _userRepository.UpdateAsync(user);
+        return RedirectToAction("Profile");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UpdatePassword(ProfileViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View("Profile", model);
+        }
+
+        var user = await _userRepository.GetByIdAsync(model.Id);
+        if (user == null)
+        {
+            throw new Exception($"User with id {model.Id} not found");
+        }
+
+        if (!string.IsNullOrWhiteSpace(model.OldPassword) && !string.IsNullOrWhiteSpace(model.Password))
+        {
+            if (!PasswordService.VerifyPassword(model.OldPassword, user.Password!))
+            {
+                ModelState.AddModelError(nameof(model.OldPassword), "Старий пароль невірний");
+                return View("Profile", ProfileViewModel(await _userRepository.GetByIdAsync(model.Id)));
+            }
+
+            if (model.Password != model.RepeatPassword)
+            {
+                ModelState.AddModelError(nameof(model.RepeatPassword), "Паролі не співпадають");
+                return View("Profile", ProfileViewModel(await _userRepository.GetByIdAsync(model.Id)));
+            }
+
+            user.Password = PasswordService.HashPassword(model.Password);
+            TempData["SuccessMessage"] = "Пароль оновлено";
+            await _userRepository.UpdateAsync(user);
+        }
+
         return RedirectToAction("Profile");
     }
 }
