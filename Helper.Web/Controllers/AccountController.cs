@@ -76,12 +76,15 @@ public class AccountController : Controller
         }
 
         var existingUser = (await _userRepository.GetAllAsync())
-            .FirstOrDefault(u => u.Username == model.Username);
+            .FirstOrDefault(u => u.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
         if (existingUser != null)
         {
             ViewBag.Error = "Користувач з таким ім'ям вже існує";
             return View("Register", model);
         }
+
+        
+        
 
         var user = new User
         {
@@ -166,7 +169,7 @@ public class AccountController : Controller
         if (!string.IsNullOrWhiteSpace(model.Email) && model.Email != user.Email)
         {
             var existingUser = (await _userRepository.GetAllAsync())
-                .FirstOrDefault(u => u.Email == model.Email);
+                .FirstOrDefault(u => u.Email!.Equals(model.Email, StringComparison.OrdinalIgnoreCase));
             if (existingUser != null)
             {
                 ModelState.AddModelError(nameof(model.Email), "Така адреса вже існує");

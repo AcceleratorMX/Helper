@@ -13,35 +13,42 @@ public class HomeController : Controller
     private readonly IRepository<Job, int> _jobRepository;
     private readonly IRepository<Message, long> _messageRepository;
     private readonly IRepository<User, Guid> _userRepository;
+    private readonly IRepository<Category, int> _categoryRepository;
     
-    public HomeController(ILogger<HomeController> logger, IRepository<Job, int> jobRepository, IRepository<Message, long> messageRepository, IRepository<User, Guid> userRepository)
+    public HomeController(ILogger<HomeController> logger, IRepository<Job, int> jobRepository, IRepository<Message, long> messageRepository, IRepository<User, Guid> userRepository, IRepository<Category, int> categoryRepository)
     {
         _logger = logger;
         _jobRepository = jobRepository;
         _messageRepository = messageRepository;
         _userRepository = userRepository;
+        _categoryRepository = categoryRepository;
     }
     
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? category = null)
     {
+        var categories = await _categoryRepository.GetAllAsync();
+        ViewData["Categories"] = categories.Select(c => c.Title).ToList();
+
+        var jobs = (await _jobRepository.GetAllAsync())
+            .Where(job => job.Status == JobStatuses.Active.ToString() && (category == null || category == "1" || job.Category.Title == category))
+            .Select(job => new Job
+            {
+                Id = job.Id,
+                Title = job.Title,
+                Description = job.Description,
+                Location = job.Location,
+                Category = job.Category,
+                Status = job.Status,
+                CreatedAt = job.CreatedAt,
+                CreatorId = job.CreatorId
+            })
+            .Reverse()
+            .ToList();
+
         var model = new HomeViewModel
         {
             JobModel = new Job(),
-            Jobs = (await _jobRepository.GetAllAsync())
-                .Where(job => job.Status == JobStatuses.Active.ToString())
-                .Select(job => new Job
-                {
-                    Id = job.Id,
-                    Title = job.Title,
-                    Description = job.Description,
-                    Location = job.Location,
-                    Category = job.Category,
-                    Status = job.Status,
-                    CreatedAt = job.CreatedAt,
-                    CreatorId = job.CreatorId
-                })
-                .Reverse()
-                .ToList()
+            Jobs = jobs
         };
 
         if (User.Identity!.IsAuthenticated)

@@ -1,11 +1,22 @@
-﻿@using Helper.Web.Models.Home
-@{
+﻿@{
 ViewData["Title"] = "Головна";
 var currentUserId = ViewData["CurrentUserId"] as Guid?;
 var notifications = ViewData["Notifications"] as List<NotificationViewModel>;
+var categories = ViewData["Categories"] as List<string>;
 
 }
 
+<form asp-controller="Home" asp-action="Index" method="get">
+    <select name="category" onchange="this.form.submit()">
+        <option value="" hidden>Категорії</option>
+        <option value="1">Усі</option>
+        @foreach (var category in categories!)
+        {
+        <option value="@category">@category</option>
+        }
+    </select>
+</form>
+<br>
 <ul>
     @foreach (var job in Model.Jobs)
     {
