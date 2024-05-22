@@ -1,25 +1,45 @@
 @model IEnumerable<NotificationViewModel>
 
 <div class="notifications_panel">
+    <a href="#">
+        <span class="close-icon">X</span>
+    </a>
     <h2 class="notifications_title">Сповіщення</h2>
+
+
 </div>
 
 <ul class="cards_container">
         @foreach (var notification in Model)
         {
-            <li>
-                <p>Завдання: @notification.JobTitle</p>
-                <p>Вміст: @notification.Content</p>
-                <p>Відправник: @notification.SenderName</p>
-                <p>Дата відправлення: @notification.SentAt.ToString("HH:mm dd.MM.yyyy")</p>
-                <form method="post" asp-action="ApproveMessage" asp-controller="Message">
-                    <input type="hidden" name="messageId" value="@notification.MessageId" />
-                    <button type="submit" class="btn btn-success">Підтвердити</button>
-                </form>
-                <form method="post" asp-action="RejectMessage" asp-controller="Message">
-                    <input type="hidden" name="messageId" value="@notification.MessageId" />
-                    <button type="submit" class="btn btn-danger">Відхилити</button>
-                </form>
+            <li class="card">
+                <article>
+                    <div class="card_header">
+                        <div class="card_title" title="@notification.JobTitle">@notification.JobTitle</div>
+                        <span class="card_sender" title="@notification.SenderName">Від: @notification.SenderName</span>
+                    </div>
+                        <hr class="card_line">
+                    <div class="card_content">
+                        <p class="card_content-text">@notification.Content</p>
+                    </div>
+                    <hr class="card_line">
+                    <div class="card_footer">
+                        <p>@notification.SentAt.ToString("HH:mm dd.MM.yyyy")</p>
+                        <form method="post" asp-action="ApproveMessage" asp-controller="Message">
+                            <input type="hidden" name="messageId" value="@notification.MessageId"/>
+                            <button type="submit" class="btn btn-success">Підтвердити</button>
+                        </form>
+                        <form method="post" asp-action="RejectMessage" asp-controller="Message">
+                            <input type="hidden" name="messageId" value="@notification.MessageId"/>
+                            <button type="submit" class="btn btn-danger">Відхилити</button>
+                        </form>
+                    </div>
+
+                    
+                    
+
+                </article>
+
             </li>
         }
     </ul>

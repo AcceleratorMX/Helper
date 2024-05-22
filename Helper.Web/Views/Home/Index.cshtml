@@ -48,12 +48,12 @@
 
 
 <br>
-
+<a class="notifications_indicator" href="#notifications_page">110</a>
 
 <div class="notifications_container" id="notifications_page">
     @if (notifications != null && notifications.Any())
     {
-        <a class="notifications_indicator" href="#notifications_page">110</a>
+
 
 
         @await Html.PartialAsync("_Notifications", notifications)
