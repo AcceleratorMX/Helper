@@ -9,23 +9,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace Helper.Web.Controllers;
 
 [Authorize]
-public class JobController : Controller
+public class JobController(
+    IRepository<Job, int> jobRepository,
+    IRepository<Category, int> categoryRepository,
+    IRepository<User, Guid> userRepository)
+    : Controller
 {
-    private readonly IRepository<Job, int> _jobRepository;
-    private readonly IRepository<Category, int> _categoryRepository;
-    private readonly IRepository<User, Guid> _userRepository;
-
-    public JobController(IRepository<Job, int> jobRepository, IRepository<Category, int> categoryRepository, IRepository<User, Guid> userRepository)
-    {
-        _jobRepository = jobRepository;
-        _categoryRepository = categoryRepository;
-        _userRepository = userRepository;
-    }
-
     [HttpGet]
     public async Task<IActionResult> CreateJob()
     {
-        var categories = await _categoryRepository.GetAllAsync();
+        var categories = await categoryRepository.GetAllAsync();
         ViewBag.Categories = new SelectList(categories, "Id", "Title");
         return View(new Job());
     }
@@ -38,18 +31,18 @@ public class JobController : Controller
         
         if (!ModelState.IsValid)
         {
-            var categories = await _categoryRepository.GetAllAsync();
+            var categories = await categoryRepository.GetAllAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Title");
             return View("CreateJob", job);
         }
         
         job.CreatorId = Guid.Parse(activeUserId!);
         
-        await _jobRepository.CreateAsync(job);
+        await jobRepository.CreateAsync(job);
         
-        var user = await _userRepository.GetByIdAsync(Guid.Parse(activeUserId!));
+        var user = await userRepository.GetByIdAsync(Guid.Parse(activeUserId!));
         user.CreatedJobs++;
-        await _userRepository.UpdateAsync(user);
+        await userRepository.UpdateAsync(user);
         
         return RedirectToAction("Index", "Home");
     }
@@ -58,9 +51,9 @@ public class JobController : Controller
     [HttpGet]
     public async Task<IActionResult> EditJob(int id)
     {
-        var job = await _jobRepository.GetByIdAsync(id);
+        var job = await jobRepository.GetByIdAsync(id);
 
-        var categories = await _categoryRepository.GetAllAsync();
+        var categories = await categoryRepository.GetAllAsync();
         ViewBag.Categories = new SelectList(categories, "Id", "Title");
 
         var viewModel = new EditJobViewModel
@@ -81,19 +74,19 @@ public class JobController : Controller
     {
         if (!ModelState.IsValid)
         {
-            var categories = await _categoryRepository.GetAllAsync();
+            var categories = await categoryRepository.GetAllAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Title");
             return View(model);
         }
 
-        var job = await _jobRepository.GetByIdAsync(model.Id);
+        var job = await jobRepository.GetByIdAsync(model.Id);
 
         job.Title = model.Title;
         job.Description = model.Description;
         job.Location = model.Location;
         job.CategoryId = model.CategoryId;
     
-        await _jobRepository.UpdateAsync(job);
+        await jobRepository.UpdateAsync(job);
 
         return RedirectToAction("Index", "Home");
     }
@@ -101,9 +94,9 @@ public class JobController : Controller
     [HttpPost]
     public async Task<IActionResult> DeleteJob(EditJobViewModel model)
     {
-        var job = await _jobRepository.GetByIdAsync(model.Id);
+        var job = await jobRepository.GetByIdAsync(model.Id);
 
-        await _jobRepository.DeleteAsync(model.Id);
+        await jobRepository.DeleteAsync(model.Id);
 
         return RedirectToAction("Index", "Home");
     }
@@ -111,13 +104,13 @@ public class JobController : Controller
     public async Task<IActionResult> AllJobs()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var createdJobs = (await _jobRepository.GetAllAsync())
+        var createdJobs = (await jobRepository.GetAllAsync())
             .Where(j => j.CreatorId == Guid.Parse(userId!))
             .OrderByDescending(j => j.Status == "InProgress")
             .ThenBy(j => j.Status == "Active")
             .ToList();
 
-        var assignedJobs = (await _jobRepository.GetAllAsync())
+        var assignedJobs = (await jobRepository.GetAllAsync())
             .Where(j => j.AssigneeId == Guid.Parse(userId!))
             .OrderByDescending(j => j.Status == "InProgress")
             .ThenBy(j => j.Status == "Completed")
@@ -133,14 +126,14 @@ public class JobController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ConfirmCompletion(int id)
     {
-        var job = await _jobRepository.GetByIdAsync(id);
+        var job = await jobRepository.GetByIdAsync(id);
 
         job.Status = "Completed";
-        var user = await _userRepository.GetByIdAsync(job.AssigneeId!.Value);
+        var user = await userRepository.GetByIdAsync(job.AssigneeId!.Value);
         user.CompletedJobs++;
-        await _userRepository.UpdateAsync(user);
+        await userRepository.UpdateAsync(user);
 
-        await _jobRepository.UpdateAsync(job);
+        await jobRepository.UpdateAsync(job);
 
         return RedirectToAction("AllJobs", "Job");
     }
@@ -149,14 +142,14 @@ public class JobController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CancelJob(int id)
     {
-        var job = await _jobRepository.GetByIdAsync(id);
+        var job = await jobRepository.GetByIdAsync(id);
         
-        var user = await _userRepository.GetByIdAsync(job.AssigneeId!.Value);
+        var user = await userRepository.GetByIdAsync(job.AssigneeId!.Value);
         user.FailedJobs++;
-        await _userRepository.UpdateAsync(user);
+        await userRepository.UpdateAsync(user);
         job.Status = "Active";
         job.AssigneeId = null;
-        await _jobRepository.UpdateAsync(job);
+        await jobRepository.UpdateAsync(job);
 
         return RedirectToAction("AllJobs", "Job");
     }

@@ -3,105 +3,100 @@
 @{
     ViewBag.Title = "Профіль користувача";
 }
+<div class="profile-page_wrapper">
+    <h1 class="page_title">Інформація про акаунт</h1>
+    <div class="profile-page_container">
 
-<table>
-    <thead>
-    <tr>
-        <th>Інформація про акаунт</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <th>Ім'я:</th>
-        <td>@Model.Username</td>
-    </tr>
-    <tr>
-        <th>Е-пошта:</th>
-        <td>@Model.Email</td>
-    </tr>
-    <tr>
-        <th>Місто:</th>
-        <td>@Model.City</td>
-    </tr>
-    <tr>
-        <th>Дата реєстрації:</th>
-        <td>@Model.RegisterDate.ToString("dd.MM.yyyy HH:mm")</td>
-    </tr>
-    @if (User.Identity!.IsAuthenticated)
-    {
-        <tr>
-            <th>Дата останнього входу:</th>
-            <td>@Model.LastLoginDate.ToString("dd.MM.yyyy HH:mm")</td>
-        </tr>
-    }
-    <tr>
-        <th>Завдань створено:</th>
-        <td>@Model.CreatedJobs</td>
-    </tr>
-    <tr>
-        <th>Завдань прийнято:</th>
-        <td>@Model.AcceptedJobs</td>
-    </tr>
-    <tr>
-        <th>Завдань виконано:</th>
-        <td>@Model.CompletedJobs</td>
-    </tr>
-    <tr>
-        <th>Завдань відмінено:</th>
-        <td>@Model.FailedJobs</td>
-    </tr>
-    </tbody>
-</table>
+        <table class="main-info">
+            <tbody>
+            <tr>
+                <th class="main-info_left-column">Ім'я:</th>
+                <td class="main-info_right-column">@Model.Username</td>
+            </tr>
+            <tr>
+                <th class="main-info_left-column">Е-пошта:</th>
+                <td class="main-info_right-column">@Model.Email</td>
+            </tr>
+            <tr>
+                <th class="main-info_left-column">Місто:</th>
+                <td class="main-info_right-column">@Model.City</td>
+            </tr>
+            <tr>
+                <th class="main-info_left-column">Дата реєстрації:</th>
+                <td class="main-info_right-column">@Model.RegisterDate.ToString("dd.MM.yyyy HH:mm")</td>
+            </tr>
+            @if (User.Identity!.IsAuthenticated)
+            {
+                <tr>
+                    <th class="main-info_left-column">Дата останнього входу:</th>
+                    <td class="main-info_right-column">@Model.LastLoginDate.ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+            <tr>
+                <th class="main-info_left-column">Завдань створено:</th>
+                <td class="main-info_right-column">@Model.CreatedJobs</td>
+            </tr>
+            <tr>
+                <th class="main-info_left-column">Завдань прийнято:</th>
+                <td class="main-info_right-column">@Model.AcceptedJobs</td>
+            </tr>
+            <tr>
+                <th class="main-info_left-column">Завдань виконано:</th>
+                <td class="main-info_right-column">@Model.CompletedJobs</td>
+            </tr>
+            <tr>
+                <th class="main-info_left-column">Завдань відмінено:</th>
+                <td class="main-info_right-column">@Model.FailedJobs</td>
+            </tr>
+            </tbody>
+        </table>
 
-<h3>Змінити інформацію</h3>
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert-success" role="alert">
+                @TempData["SuccessMessage"]
+            </div>
+        }
 
-<h4>Змінити електронну адресу та місто</h4>
-<form asp-action="UpdateProfile" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <label asp-for="Email">Електронна адреса:</label>
-        <input asp-for="Email" type="email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="City">Місто:</label>
-        <input asp-for="City" class="form-control" />
-        <span asp-validation-for="City" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Зберегти</button>
-    @if (TempData["SuccessMessage"] != null)
-    {
-    <div class="alert alert-success" role="alert">
-        @TempData["SuccessMessage"]
-    </div>
-    }
-</form>
-
-<h4>Змінити пароль</h4>
-<form asp-action="UpdatePassword" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <label asp-for="OldPassword">Старий пароль:</label>
-        <input type="password" asp-for="OldPassword" class="form-control" />
-        <span asp-validation-for="OldPassword" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Password">Новий пароль:</label>
-        <input type="password" asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="RepeatPassword">Повторіть новий пароль:</label>
-        <input type="password" asp-for="RepeatPassword" class="form-control" />
-        <span asp-validation-for="RepeatPassword" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Змінити пароль</button>
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success" role="alert">
-            @TempData["SuccessMessage"]
+        <div class="update-contact-data">
+            <form asp-action="UpdateProfile" method="post" class="profile-page-form_container">
+                <input type="hidden" asp-for="Id"/>
+                <div class="input_container">
+                    <label asp-for="Email" class="input_label">Електронна адреса:</label>
+                    <input asp-for="Email" type="email" class="input_field"/>
+                    <span asp-validation-for="Email" class="text-danger profile_text-danger"></span>
+                </div>
+                <div class="input_container">
+                    <label asp-for="City" class="input_label">Місто:</label>
+                    <input asp-for="City" class="input_field"/>
+                    <span asp-validation-for="City" class="text-danger profile_text-danger"></span>
+                </div>
+                <div class="form-button_container">
+                    <button type="submit" class="form_button-submit buttons">оновити дані</button>
+                </div>
+            </form>
+            <hr class="profile-card_line">
+            <form asp-action="UpdatePassword" method="post" class="profile-page-form_container">
+                <input type="hidden" asp-for="Id"/>
+                <div class="input_container">
+                    <label asp-for="OldPassword" class="input_label">Старий пароль:</label>
+                    <input type="password" asp-for="OldPassword" class="input_field"/>
+                    <span asp-validation-for="OldPassword" class="text-danger profile_text-danger"></span>
+                </div>
+                <div class="input_container">
+                    <label asp-for="Password" class="input_label">Новий пароль:</label>
+                    <input type="password" asp-for="Password" class="input_field"/>
+                    <span asp-validation-for="Password" class="text-danger profile_text-danger"></span>
+                </div>
+                <div class="input_container">
+                    <label asp-for="RepeatPassword" class="input_label">Повторіть новий пароль:</label>
+                    <input type="password" asp-for="RepeatPassword" class="input_field"/>
+                    <span asp-validation-for="RepeatPassword" class="text-danger profile_text-danger"></span>
+                </div>
+                <div class="form-button_container">
+                    <button type="submit" class="form_button-submit buttons">Зберегти пароль</button>
+                </div>
+            </form>
         </div>
-    }
-</form>
-
-
+    </div>
+</div>

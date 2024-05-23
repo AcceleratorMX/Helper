@@ -25,7 +25,8 @@
                 <article>
                     <div class="card_header main-card_header">
                         <div class="card_title">
-                            <h2>@job.Title</h2></div>
+                            <h2>@job.Title</h2>
+                        </div>
                         <span class="card_job-id">#@job.Id</span>
                     </div>
 
@@ -34,7 +35,7 @@
                             <span class="card_category">@job.Category.Title</span>
                             <div class="card_line-vertical"></div>
                         </div>
-                        
+
                         <div class="card_content">
                             <p class="card_content-text">@job.Description</p>
                         </div>
@@ -49,14 +50,14 @@
                         <div class="main-card_button">
                             @if (User.Identity!.IsAuthenticated)
                             {
-                            if (job.CreatorId == currentUserId)
-                            {
-                            <a asp-controller="Job" asp-action="EditJob" asp-route-id="@job.Id" class="notifications-card_button btn-warning">Редагувати</a>
-                            }
-                            else
-                            {
-                            <a asp-controller="Message" asp-action="CreateMessage" asp-route-jobId="@job.Id" class="notifications-card_button btn-primary">Відгукнутись</a>
-                            }
+                                if (job.CreatorId == currentUserId)
+                                {
+                                    <a asp-controller="Job" asp-action="EditJob" asp-route-id="@job.Id" class="notifications-card_button btn-warning">Редагувати</a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Message" asp-action="CreateMessage" asp-route-jobId="@job.Id" class="notifications-card_button btn-primary">Відгукнутись</a>
+                                }
                             }
                         </div>
                     </div>
@@ -70,11 +71,7 @@
 <br>
 
 
-
-    @if (notifications != null && notifications.Any())
-    {
-
-
-
-        @await Html.PartialAsync("_Notifications", notifications)
-    }
+@if (notifications != null && notifications.Any())
+{
+    @await Html.PartialAsync("_Notifications", notifications)
+}

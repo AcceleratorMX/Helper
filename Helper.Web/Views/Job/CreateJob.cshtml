@@ -1,33 +1,37 @@
 @model Job
 
 @{
-    ViewData["Title"] = "Створити";
+    ViewData["Title"] = "Нове оголошення";
 }
 
-<div class="add-form">
-    <form asp-controller="Job" asp-action="CreateJob" class="job-form">
-        <div class="form-group">
-            <label asp-for="Title">Назва завдання</label>
-            <input asp-for="Title" class="input-job-name" placeholder="Вкажіть назву завдання"/>
+<div class="create-edit-page_wrapper">
+    <h1 class="page_title">Створити нове оголошення</h1>
+    <form asp-controller="Job" asp-action="CreateJob" class="form_container create-edit-form_container">
+        <div class="input_container">
+            <label asp-for="Title" class="input_label">Назва завдання</label>
+            <input asp-for="Title" class="input_field" placeholder="Вкажіть назву завдання"/>
             <span asp-validation-for="Title" class="validation-error"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="Description">Опис завдання</label>
-            <textarea asp-for="Description" class="input-job-name" placeholder="Сформулюйте завдання"></textarea>
+        <div class="input_container">
+            <label asp-for="Description" class="input_label">Опис завдання</label>
+            <textarea asp-for="Description" class="input_field" placeholder="Сформулюйте завдання"></textarea>
             <span asp-validation-for="Description" class="validation-error"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="CategoryId">Категорія</label>
-            <select asp-for="CategoryId" class="form-select input-job-category" asp-items="ViewBag.Categories">
-                <option value="0" hidden>Категорія</option>
-            </select>
-            <span asp-validation-for="CategoryId" class="validation-error"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Location">Місто</label>
-            <input asp-for="Location" class="input-job-name" placeholder="Вкажіть місце виконання завдання"/>
+        <div class="input_container">
+            <label asp-for="Location" class="input_label">Місто</label>
+            <input asp-for="Location" class="input_field" placeholder="Вкажіть місце виконання завдання"/>
             <span asp-validation-for="Location" class="validation-error"></span>
         </div>
-        <button type="submit" class="btn btn-outline-primary">Створити</button>
+        <div class="input_container">
+            <div class="select-list" style="display: inline">
+                <select asp-for="CategoryId" class="select-list_item" asp-items="ViewBag.Categories">
+                    <option value="0" hidden>Категорія</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="validation-error"></span>
+            </div>
+        </div>
+        <div class="form-button_container">
+            <button type="submit" class="form_button-submit">Створити</button>
+        </div>
     </form>
 </div>

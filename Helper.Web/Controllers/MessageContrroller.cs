@@ -9,25 +9,17 @@ using Microsoft.AspNetCore.Authorization;
 namespace Helper.Web.Controllers;
 
 [Authorize]
-public class MessageController : Controller
+public class MessageController(
+    IRepository<Message, long> messageRepository,
+    IRepository<Job, int> jobRepository,
+    IRepository<User, Guid> userRepository)
+    : Controller
 {
-    private readonly IRepository<Message, long> _messageRepository;
-    private readonly IRepository<Job, int> _jobRepository;
-    private readonly IRepository<User, Guid> _userRepository;
-
-    public MessageController(IRepository<Message, long> messageRepository, IRepository<Job, int> jobRepository,
-        IRepository<User, Guid> userRepository)
-    {
-        _messageRepository = messageRepository;
-        _jobRepository = jobRepository;
-        _userRepository = userRepository;
-    }
-
     public async Task<IActionResult> CreateMessage(int jobId)
     {
-        var job = await _jobRepository.GetByIdAsync(jobId);
+        var job = await jobRepository.GetByIdAsync(jobId);
 
-        var creator = await _userRepository.GetByIdAsync(job.CreatorId);
+        var creator = await userRepository.GetByIdAsync(job.CreatorId);
 
         var model = new CreateMessageViewModel
         {
@@ -50,7 +42,7 @@ public class MessageController : Controller
             return View(model);
         }
 
-        var job = await _jobRepository.GetByIdAsync(model.JobId);
+        var job = await jobRepository.GetByIdAsync(model.JobId);
 
         var message = new Message
         {
@@ -61,7 +53,7 @@ public class MessageController : Controller
             ReceiverId = job.CreatorId,
         };
 
-        await _messageRepository.CreateAsync(message);
+        await messageRepository.CreateAsync(message);
 
         return RedirectToAction("Index", "Home");
     }
@@ -69,21 +61,21 @@ public class MessageController : Controller
     [HttpPost]
     public async Task<IActionResult> ApproveMessage(long messageId)
     {
-        var message = await _messageRepository.GetByIdAsync(messageId);
+        var message = await messageRepository.GetByIdAsync(messageId);
 
         message.Status = MessageStatuses.Approved.ToString();
-        await _messageRepository.UpdateAsync(message);
+        await messageRepository.UpdateAsync(message);
 
-        var job = await _jobRepository.GetByIdAsync(message.JobId);
+        var job = await jobRepository.GetByIdAsync(message.JobId);
 
         job.Status = JobStatuses.InProgress.ToString();
         job.AssigneeId = message.SenderId;
-        await _jobRepository.UpdateAsync(job);
+        await jobRepository.UpdateAsync(job);
 
-        var user = await _userRepository.GetByIdAsync(message.SenderId);
+        var user = await userRepository.GetByIdAsync(message.SenderId);
 
         user.AcceptedJobs++;
-        await _userRepository.UpdateAsync(user);
+        await userRepository.UpdateAsync(user);
 
         return RedirectToAction("Index", "Home");
     }
@@ -91,10 +83,10 @@ public class MessageController : Controller
     [HttpPost]
     public async Task<IActionResult> RejectMessage(long messageId)
     {
-        var message = await _messageRepository.GetByIdAsync(messageId);
+        var message = await messageRepository.GetByIdAsync(messageId);
 
         message.Status = MessageStatuses.Rejected.ToString();
-        await _messageRepository.UpdateAsync(message);
+        await messageRepository.UpdateAsync(message);
 
         return RedirectToAction("Index", "Home");
     }

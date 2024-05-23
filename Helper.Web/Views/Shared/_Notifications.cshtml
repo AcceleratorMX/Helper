@@ -14,39 +14,38 @@
         <ul class="cards_container">
             @foreach (var notification in Model)
             {
-            <li class="card">
-                <article>
-                    <div class="card_header">
-                        <div class="card_title" title="@notification.JobTitle"><h2>@notification.JobTitle</h2></div>
-                    </div>
+                <li class="card">
+                    <article>
+                        <div class="card_header">
+                            <div class="card_title" title="@notification.JobTitle">
+                                <h2>@notification.JobTitle</h2>
+                            </div>
+                        </div>
 
-                    <div class="card_content">
-                        <p class="card_content-text">@notification.Content</p>
-                    </div>
-                    <hr class="card_line">
-                    <div class="card_footer">
-                        <div class="card_about">
-                            <span class="card_sender" title="@notification.SenderName">Від: @notification.SenderName</span>
-                            <span class="card_date">@notification.SentAt.ToString("HH:mm dd.MM.yyyy")</span>
+                        <div class="card_content">
+                            <p class="card_content-text">@notification.Content</p>
                         </div>
                         <hr class="card_line">
-                        <div class="card_buttons">
-                            <form method="post" asp-action="ApproveMessage" asp-controller="Message" class="notifications-card_button notifications-card_button-success">
-                                <input type="hidden" name="messageId" value="@notification.MessageId"/>
-                                <button type="submit">Підтвердити</button>
-                            </form>
-                            <form method="post" asp-action="RejectMessage" asp-controller="Message" class="notifications-card_button notifications-card_button-danger">
-                                <input type="hidden" name="messageId" value="@notification.MessageId"/>
-                                <button type="submit">Відхилити</button>
-                            </form>
+                        <div class="card_footer">
+                            <div class="card_about">
+                                <span class="card_sender" title="@notification.SenderName">Від: @notification.SenderName</span>
+                                <span class="card_date">@notification.SentAt.ToString("HH:mm dd.MM.yyyy")</span>
+                            </div>
+                            <hr class="card_line">
+                            <div class="card_buttons">
+                                <form method="post" asp-action="ApproveMessage" asp-controller="Message" class="notifications-card_button notifications-card_button-success">
+                                    <input type="hidden" name="messageId" value="@notification.MessageId"/>
+                                    <button type="submit">Підтвердити</button>
+                                </form>
+                                <form method="post" asp-action="RejectMessage" asp-controller="Message" class="notifications-card_button notifications-card_button-danger">
+                                    <input type="hidden" name="messageId" value="@notification.MessageId"/>
+                                    <button type="submit">Відхилити</button>
+                                </form>
+                            </div>
                         </div>
-
-                    </div>
-                </article>
-
-            </li>
+                    </article>
+                </li>
             }
         </ul>
-
     </div>
 </aside>

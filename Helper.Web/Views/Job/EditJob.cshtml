@@ -1,38 +1,47 @@
 @model EditJobViewModel
 
-<h2>Редагувати завдання</h2>
 
-<form asp-action="EditJob" method="post">
-    <div class="form-group">
-        <label asp-for="Title">Назва завдання</label>
-        <input asp-for="Title" class="input-job-name" placeholder="Вкажіть назву завдання"/>
-        <span asp-validation-for="Title" class="validation-error"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Description">Опис завдання</label>
-        <textarea asp-for="Description" class="input-job-name" placeholder="Сформулюйте завдання"></textarea>
-        <span asp-validation-for="Description" class="validation-error"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="CategoryId">Категорія</label>
-        <select asp-for="CategoryId" class="form-select input-job-category" asp-items="ViewBag.Categories">
-            <option value="0" hidden>Категорія</option>
-        </select>
-        <span asp-validation-for="CategoryId" class="validation-error"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Location">Місто</label>
-        <input asp-for="Location" class="input-job-name" placeholder="Вкажіть місце виконання завдання"/>
-        <span asp-validation-for="Location" class="validation-error"></span>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Зберегти" class="btn btn-primary" />
-        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Назад</a>
 
+<div class="create-edit-page_wrapper">
+    <div class="create-edit-page_header">
+        <h1 class="page_title">Редагувати завдання</h1>
+        <form asp-action="DeleteJob" method="post" class="mt-3">
+            <input type="hidden" asp-for="Id"/>
+            <button type="submit" value="Видалити" class="delete-icon">
+                <img src="~/images/icons/delete-trash.png" alt="видалити">
+            </button>
+        </form>
     </div>
 
-</form>
-<form asp-action="DeleteJob" method="post" class="mt-3">
-    <input type="hidden" asp-for="Id" />
-    <input type="submit" value="Видалити" class="btn btn-danger" />
-</form>
+    <form asp-action="EditJob" method="post" class="form_container create-edit-form_container">
+        <div class="input_container">
+            <label asp-for="Title" class="input_label">Назва завдання</label>
+            <input asp-for="Title" class="input_field" placeholder="Вкажіть назву завдання"/>
+            <span asp-validation-for="Title" class="text-danger profile_text-danger"></span>
+        </div>
+        <div class="input_container">
+            <label asp-for="Description" class="input_label">Опис завдання</label>
+            <textarea asp-for="Description" class="input_field" placeholder="Сформулюйте завдання"></textarea>
+            <span asp-validation-for="Description" class="text-danger profile_text-danger"></span>
+        </div>
+        <div class="input_container">
+            <label asp-for="Location" class="input_label">Місто</label>
+            <input asp-for="Location" class="input_field" placeholder="Вкажіть місце виконання завдання"/>
+            <span asp-validation-for="Location" class="text-danger profile_text-danger"></span>
+        </div>
+        <div class="input_container">
+            <div class="select-list" style="display: inline">
+                <select asp-for="CategoryId" class="select-list_item" asp-items="ViewBag.Categories">
+                    <option value="0" hidden>Категорія</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger profile_text-danger"></span>
+            </div>
+        </div>
+        <div class="form-button_container">
+            <button type="submit" value="Зберегти" class="form_button-submit">Зберегти</button>
+        </div>
+    </form>
+
+</div>
+
+

@@ -10,17 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Helper.Web.Controllers;
 
-public class AccountController : Controller
+public class AccountController(IRepository<User, Guid> userRepository, ILogger<AccountController> logger)
+    : Controller
 {
-    private readonly IRepository<User, Guid> _userRepository;
-    private readonly ILogger<AccountController> _logger;
-
-    public AccountController(IRepository<User, Guid> userRepository, ILogger<AccountController> logger)
-    {
-        _userRepository = userRepository;
-        _logger = logger;
-    }
-
     [HttpGet]
     public IActionResult Register()
     {
@@ -39,11 +31,11 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid)
         {
-            _logger.LogWarning("Login model state is invalid.");
+            logger.LogWarning("Login model state is invalid.");
             return View("Login", model);
         }
 
-        var user = (await _userRepository.GetAllAsync())
+        var user = (await userRepository.GetAllAsync())
             .FirstOrDefault(u => u.Username == model.Username);
 
         if (user == null)
@@ -59,7 +51,7 @@ public class AccountController : Controller
 
         user.LastLoginDate = DateTime.Now;
         ;
-        await _userRepository.UpdateAsync(user);
+        await userRepository.UpdateAsync(user);
 
         await AuthenticateAsync(user);
         return RedirectToAction("Index", "Home");
@@ -71,11 +63,11 @@ public class AccountController : Controller
     {
         if (!ModelState.IsValid)
         {
-            _logger.LogWarning("Register model state is invalid.");
+            logger.LogWarning("Register model state is invalid.");
             return View("Register", model);
         }
 
-        var existingUser = (await _userRepository.GetAllAsync())
+        var existingUser = (await userRepository.GetAllAsync())
             .FirstOrDefault(u => u.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
         if (existingUser != null)
         {
@@ -92,7 +84,7 @@ public class AccountController : Controller
             Password = PasswordService.HashPassword(model.Password),
         };
 
-        await _userRepository.CreateAsync(user);
+        await userRepository.CreateAsync(user);
 
         await AuthenticateAsync(user);
         return RedirectToAction("Index", "Home");
@@ -122,7 +114,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Profile()
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var user = await _userRepository.GetByIdAsync(userId);
+        var user = await userRepository.GetByIdAsync(userId);
         if (user == null)
         {
             throw new Exception($"User with id {userId} not found");
@@ -160,7 +152,7 @@ public class AccountController : Controller
             return View("Profile", model);
         }
 
-        var user = await _userRepository.GetByIdAsync(model.Id);
+        var user = await userRepository.GetByIdAsync(model.Id);
         if (user == null)
         {
             throw new Exception($"User with id {model.Id} not found");
@@ -168,28 +160,28 @@ public class AccountController : Controller
 
         if (!string.IsNullOrWhiteSpace(model.Email) && model.Email != user.Email)
         {
-            var existingUser = (await _userRepository.GetAllAsync())
+            var existingUser = (await userRepository.GetAllAsync())
                 .FirstOrDefault(u => u.Email!.Equals(model.Email, StringComparison.OrdinalIgnoreCase));
             if (existingUser != null)
             {
                 ModelState.AddModelError(nameof(model.Email), "Така адреса вже існує");
-                return View("Profile", ProfileViewModel(await _userRepository.GetByIdAsync(model.Id)));
+                return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
             }
         }
 
         if (model.Email != user.Email)
         {
             user.Email = model.Email;
-            TempData["SuccessMessage"] = "Електронна пошта оновлена";
+            TempData["SuccessMessage"] = "Електронна пошта оновлена!";
         }
 
         if (model.City != user.City)
         {
             user.City = model.City;
-            TempData["SuccessMessage"] = "Місто оновлено";
+            TempData["SuccessMessage"] = "Місто оновлено!";
         }
 
-        await _userRepository.UpdateAsync(user);
+        await userRepository.UpdateAsync(user);
         return RedirectToAction("Profile");
     }
 
@@ -202,7 +194,7 @@ public class AccountController : Controller
             return View("Profile", model);
         }
 
-        var user = await _userRepository.GetByIdAsync(model.Id);
+        var user = await userRepository.GetByIdAsync(model.Id);
         if (user == null)
         {
             throw new Exception($"User with id {model.Id} not found");
@@ -213,18 +205,18 @@ public class AccountController : Controller
             if (!PasswordService.VerifyPassword(model.OldPassword, user.Password!))
             {
                 ModelState.AddModelError(nameof(model.OldPassword), "Старий пароль невірний");
-                return View("Profile", ProfileViewModel(await _userRepository.GetByIdAsync(model.Id)));
+                return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
             }
 
             if (model.Password != model.RepeatPassword)
             {
                 ModelState.AddModelError(nameof(model.RepeatPassword), "Паролі не співпадають");
-                return View("Profile", ProfileViewModel(await _userRepository.GetByIdAsync(model.Id)));
+                return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
             }
 
             user.Password = PasswordService.HashPassword(model.Password);
             TempData["SuccessMessage"] = "Пароль оновлено";
-            await _userRepository.UpdateAsync(user);
+            await userRepository.UpdateAsync(user);
         }
 
         return RedirectToAction("Profile");

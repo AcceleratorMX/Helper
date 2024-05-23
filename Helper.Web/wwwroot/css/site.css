@@ -23,7 +23,6 @@ body {
     color: #333;
     background-color: var(--primary-color);
     overflow-x: hidden;
-
 }
 
 .wrapper {
@@ -149,12 +148,15 @@ body {
 .main {
     flex: 1 1 auto;
     margin: 0 auto;
+    max-width: 1440px;
+    width: 100%;
 }
 
 .main_container {
     display: flex;
     justify-content: center;
     margin-top: 3rem;
+    border: 1px solid red;
 }
 
 .notifications_container {
@@ -362,7 +364,7 @@ body {
 /* #region index */
 
 .main-cards {
-    gap: 1rem;
+    gap: 2rem;
     overflow-y: auto;
 }
 
@@ -519,7 +521,8 @@ body {
     padding: 0.5rem;
     border: 0.1rem solid var(--elements-color);
     border-radius: var(--border-radius);
-
+    width: 100%;
+    max-width: 100%;
 }
 
 .input_field:focus {
@@ -570,8 +573,109 @@ body {
 
 }
 /* #endregion */
+/* #region profile */
+.page_title {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
 
+.profile-page_wrapper {
+    width: 100%;
+}
+.profile-page_container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem
+}
 
+.main-info {
+    background-color: var(--light-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--elements-color);
+    padding: 1rem;
+}
+
+.main-info_left-column {
+    text-align: left;
+    padding-right: 1rem;
+}
+
+.main-info_left-column,
+.main-info_right-column {
+    padding-bottom: 0.5rem;
+}
+
+.profile-page-form_container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: var(--light-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    gap: 1.5rem;
+    min-width: 30rem;
+    position: relative;
+}
+
+.profile-card_line {
+    text-align: center;
+    width: 100%;
+    border: 0.1rem solid var(--primary-color);
+    margin: 0 auto;
+}
+
+.alert-success {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--green-color);
+    text-shadow:
+            -2px -2px 0 #fff,
+            2px -2px 0 #fff,
+            -2px  2px 0 #fff,
+            2px  2px 0 #fff;
+    margin-top: 17%;
+}
+
+.buttons {
+    text-transform: uppercase;
+}
+
+.profile_text-danger {
+    transform: translate(9rem, 4.2rem);
+}
+
+/* #endregion */
+
+/* #region create-edit forms*/
+
+.create-edit-page_wrapper {
+    width: 100%;
+}
+
+.create-edit-form_container{
+    margin: 0 auto;
+    padding: 2rem;
+    min-width: 50%;
+}
+
+.create-edit-page_header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.delete-icon {
+    border: 0.2rem solid var(--light-color);
+    padding: 0.6rem;
+    border-radius: 50%;
+}
+
+.delete-icon:hover {
+    filter: opacity(0.5);
+}
 /* #endregion */
 
 

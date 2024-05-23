@@ -7,7 +7,6 @@
 <div class="login-page_container">
     <form asp-action="Login" method="post" class="form_container">
         <h2 class="login_title">Вхід</h2>
-        @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
         <div class="input_container">
             <label asp-for="Username" class="input_label">Логін</label>
             <input asp-for="Username" class="input_field" placeholder="Введіть ім'я користувача (логін)"/>
@@ -24,10 +23,8 @@
             <button type="submit" class="form_button-submit login_button">Вхід</button>
         </div>
         <span class="login-page_text">
-            Не зареєстровані? 
-            <a asp-controller="Account" asp-action="Login" class="login-page_link">Зареєструватись</a>
+            Не зареєстровані?
+            <a asp-controller="Account" asp-action="Register" class="login-page_link">Зареєструватись</a>
         </span>
     </form>
 </div>
-
-
