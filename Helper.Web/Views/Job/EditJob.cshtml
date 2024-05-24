@@ -1,47 +1,53 @@
-@model EditJobViewModel
+@model CreateEditJobViewModel
 
-
+@{
+ViewData["Title"] = "Редагувати оголошення";
+}
 
 <div class="create-edit-page_wrapper">
-    <div class="create-edit-page_header">
-        <h1 class="page_title">Редагувати завдання</h1>
-        <form asp-action="DeleteJob" method="post" class="mt-3">
-            <input type="hidden" asp-for="Id"/>
-            <button type="submit" value="Видалити" class="delete-icon">
-                <img src="~/images/icons/delete-trash.png" alt="видалити">
-            </button>
-        </form>
+    <div class="page_header">
+        <h1 class="page_title">Редагування</h1>
+        <button class="button-back buttons">
+            <a asp-controller="Home" asp-action="Index">
+                назад
+            </a>
+        </button>
     </div>
 
     <form asp-action="EditJob" method="post" class="form_container create-edit-form_container">
         <div class="input_container">
             <label asp-for="Title" class="input_label">Назва завдання</label>
             <input asp-for="Title" class="input_field" placeholder="Вкажіть назву завдання"/>
-            <span asp-validation-for="Title" class="text-danger profile_text-danger"></span>
+            <span asp-validation-for="Title" class="text-danger"></span>
         </div>
         <div class="input_container">
             <label asp-for="Description" class="input_label">Опис завдання</label>
             <textarea asp-for="Description" class="input_field" placeholder="Сформулюйте завдання"></textarea>
-            <span asp-validation-for="Description" class="text-danger profile_text-danger"></span>
+            <span asp-validation-for="Description" class="text-danger"></span>
         </div>
         <div class="input_container">
             <label asp-for="Location" class="input_label">Місто</label>
             <input asp-for="Location" class="input_field" placeholder="Вкажіть місце виконання завдання"/>
-            <span asp-validation-for="Location" class="text-danger profile_text-danger"></span>
+            <span asp-validation-for="Location" class="text-danger"></span>
         </div>
         <div class="input_container">
-            <div class="select-list" style="display: inline">
-                <select asp-for="CategoryId" class="select-list_item" asp-items="ViewBag.Categories">
+            <div style="display: inline">
+                <select asp-for="CategoryId" class="select-list" asp-items="ViewBag.Categories">
                     <option value="0" hidden>Категорія</option>
                 </select>
-                <span asp-validation-for="CategoryId" class="text-danger profile_text-danger"></span>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
         </div>
         <div class="form-button_container">
             <button type="submit" value="Зберегти" class="form_button-submit">Зберегти</button>
+            <form asp-action="DeleteJob" method="post">
+                <input type="hidden" asp-for="Id"/>
+                <button type="submit" value="Видалити" class="delete-icon">
+                    <img src="~/images/icons/delete-trash.png" alt="видалити">
+                </button>
+            </form>
         </div>
     </form>
-
 </div>
 
 

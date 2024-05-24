@@ -13,7 +13,7 @@ public class MessageRepository(HelperDbContext context) : IRepository<Message, l
 
     public async Task<Message> GetByIdAsync(long id)
     {
-        return await context.Messages.FindAsync(id) ?? 
+        return await context.Messages.FindAsync(id) ??
                throw new Exception($"Message with id {id} not found");
     }
 
@@ -23,7 +23,7 @@ public class MessageRepository(HelperDbContext context) : IRepository<Message, l
         {
             throw new Exception("Sender and receiver cannot be the same");
         }
-        
+
         await context.Messages.AddAsync(entity);
         await context.SaveChangesAsync();
     }

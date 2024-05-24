@@ -19,7 +19,7 @@ public class MessageController(
     {
         var job = await jobRepository.GetByIdAsync(jobId);
 
-        var creator = await userRepository.GetByIdAsync(job.CreatorId);
+        var creator = await userRepository.GetByIdAsync(job.CreatorId!.Value);
 
         var model = new CreateMessageViewModel
         {
@@ -50,7 +50,7 @@ public class MessageController(
             Text = model.Text,
             CreatedAt = DateTime.Now,
             SenderId = activeUserId,
-            ReceiverId = job.CreatorId,
+            ReceiverId = job.CreatorId!.Value
         };
 
         await messageRepository.CreateAsync(message);
@@ -72,7 +72,7 @@ public class MessageController(
         job.AssigneeId = message.SenderId;
         await jobRepository.UpdateAsync(job);
 
-        var user = await userRepository.GetByIdAsync(message.SenderId);
+        var user = await userRepository.GetByIdAsync(message.SenderId!.Value);
 
         user.AcceptedJobs++;
         await userRepository.UpdateAsync(user);

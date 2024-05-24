@@ -19,7 +19,7 @@ public class Job : Entity<int>
     public string Location { get; set; } = null!;
 
     [Display(Name = "Дата створення")]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     [Display(Name = "Дата завершення")]
     public DateTime? CompletedAt { get; set; }
@@ -28,7 +28,7 @@ public class Job : Entity<int>
     public string Status { get; set; } = JobStatuses.Active.ToString();
 
     [Display(Name = "Створив")]
-    public Guid CreatorId { get; set; }
+    public Guid? CreatorId { get; set; }
 
     [ForeignKey(nameof(CreatorId))]
     public User? Creator { get; set; }
@@ -40,11 +40,10 @@ public class Job : Entity<int>
     public User? Assignee { get; set; }
 
     [Display(Name = "Категорія")]
-    [Range(1, int.MaxValue, ErrorMessage = "Оберіть категорію!")]
+    [Range(0, int.MaxValue, ErrorMessage = "Оберіть категорію!")]
     public int CategoryId { get; set; }
 
     [ForeignKey(nameof(CategoryId))]
     public Category? Category { get; set; }
-
-    public ICollection<Message>? Messages { get; set; }
+    
 }

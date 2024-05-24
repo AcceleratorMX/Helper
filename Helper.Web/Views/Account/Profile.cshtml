@@ -4,7 +4,14 @@
     ViewBag.Title = "Профіль користувача";
 }
 <div class="profile-page_wrapper">
-    <h1 class="page_title">Інформація про акаунт</h1>
+    <div class="page_header">
+        <h1 class="page_title">Загальна інформація</h1>
+        <button class="button-back buttons">
+            <a asp-controller="Home" asp-action="Index">
+                назад
+            </a>
+        </button>
+    </div>
     <div class="profile-page_container">
 
         <table class="main-info">
@@ -33,19 +40,19 @@
                 </tr>
             }
             <tr>
-                <th class="main-info_left-column">Завдань створено:</th>
+                <th class="main-info_left-column">Створено:</th>
                 <td class="main-info_right-column">@Model.CreatedJobs</td>
             </tr>
             <tr>
-                <th class="main-info_left-column">Завдань прийнято:</th>
+                <th class="main-info_left-column">Прийнято:</th>
                 <td class="main-info_right-column">@Model.AcceptedJobs</td>
             </tr>
             <tr>
-                <th class="main-info_left-column">Завдань виконано:</th>
+                <th class="main-info_left-column">Виконано:</th>
                 <td class="main-info_right-column">@Model.CompletedJobs</td>
             </tr>
             <tr>
-                <th class="main-info_left-column">Завдань відмінено:</th>
+                <th class="main-info_left-column">Скасовано:</th>
                 <td class="main-info_right-column">@Model.FailedJobs</td>
             </tr>
             </tbody>
@@ -84,9 +91,9 @@
                     <span asp-validation-for="OldPassword" class="text-danger profile_text-danger"></span>
                 </div>
                 <div class="input_container">
-                    <label asp-for="Password" class="input_label">Новий пароль:</label>
-                    <input type="password" asp-for="Password" class="input_field"/>
-                    <span asp-validation-for="Password" class="text-danger profile_text-danger"></span>
+                    <label asp-for="NewPassword" class="input_label">Новий пароль:</label>
+                    <input type="password" asp-for="NewPassword" class="input_field"/>
+                    <span asp-validation-for="NewPassword" class="text-danger profile_text-danger"></span>
                 </div>
                 <div class="input_container">
                     <label asp-for="RepeatPassword" class="input_label">Повторіть новий пароль:</label>

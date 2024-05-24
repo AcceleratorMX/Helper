@@ -1,11 +1,26 @@
-<h2>Мої завдання</h2>
 
-<p>Створені завдання:</p>
-@await Html.PartialAsync("_CreatedJobs", ViewBag.CreatedJobs, null)
+<div class="all-jobs-page_wrapper">
+    <div class="page_header">
+        <h1 class="page_title">Мої завдання</h1>
+        <button class="button-back buttons">
+            <a asp-controller="Home" asp-action="Index">
+                назад
+            </a>
+        </button>
+    </div>
+    <div class="all-jobs_container">
 
-<br>
-<br>
-<br>
+        <div>
+            @await Html.PartialAsync("_CreatedJobs", ViewBag.CreatedJobs, null)
+        </div>
+           
 
-<p>Прийняті завдання:</p>
-@await Html.PartialAsync("_AssignedJobs", ViewBag.AssignedJobs, null)
+
+        <div>
+            @await Html.PartialAsync("_AssignedJobs", ViewBag.AssignedJobs, null)
+        </div>
+            
+         
+
+    </div>
+</div>

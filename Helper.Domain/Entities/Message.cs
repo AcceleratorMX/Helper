@@ -10,16 +10,16 @@ public class Message : Entity<long>
     [Required(ErrorMessage = "Введіть текст повідомлення")]
     public string Text { get; set; } = string.Empty;
     public string Status { get; set; } = MessageStatuses.Sent.ToString();
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public int JobId { get; set; }
 
     [ForeignKey(nameof(JobId))]
     public Job? Job { get; set; }
-    public Guid SenderId { get; set; }
+    public Guid? SenderId { get; set; }
 
     [ForeignKey(nameof(SenderId))]
     public User? Sender { get; set; }
-    public Guid ReceiverId { get; set; }
+    public Guid? ReceiverId { get; set; }
 
     [ForeignKey(nameof(ReceiverId))]
     public User? Receiver { get; set; }

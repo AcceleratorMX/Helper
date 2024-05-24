@@ -30,6 +30,7 @@ builder.Services.AddScoped<IRepository<User, Guid>, UserRepository>();
 builder.Services.AddScoped<IRepository<Category, int>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Job, int>, JobRepository>();
 builder.Services.AddScoped<IRepository<Message, long>, MessageRepository>();
+builder.Services.AddScoped<ValidationService>();
 
 
 var app = builder.Build();

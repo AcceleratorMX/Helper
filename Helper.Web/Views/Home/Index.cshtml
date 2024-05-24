@@ -5,12 +5,11 @@
     var categories = ViewData["Categories"] as List<string>;
 }
 
-
 <div class="main-content_container">
-    <form asp-controller="Home" asp-action="Index" method="get" class="select-list">
-        <select name="category" onchange="this.form.submit()" class="select-list_item">
-            <option value="" hidden class="select-list_item">Категорії</option>
-            <option value="1" class="select-list_item">Усі</option>
+    <form asp-controller="Home" asp-action="Index" method="get">
+        <select name="category" onchange="this.form.submit()" class="select-list">
+            <option value="" hidden>Категорії</option>
+            <option value="1">Усі</option>
             @foreach (var category in categories!)
             {
                 <option value="@category" class="select-list_item">@category</option>
@@ -66,10 +65,6 @@
         }
     </ul>
 </div>
-
-
-<br>
-
 
 @if (notifications != null && notifications.Any())
 {

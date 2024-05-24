@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Helper.Domain.Migrations
 {
     [DbContext(typeof(HelperDbContext))]
-    [Migration("20240520103531_Initial2")]
-    partial class Initial2
+    [Migration("20240523223802_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,7 +66,7 @@ namespace Helper.Domain.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -110,10 +110,10 @@ namespace Helper.Domain.Migrations
                     b.Property<int>("JobId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ReceiverId")
+                    b.Property<Guid?>("ReceiverId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SenderId")
+                    b.Property<Guid?>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Status")
@@ -182,8 +182,7 @@ namespace Helper.Domain.Migrations
                 {
                     b.HasOne("Helper.Domain.Entities.User", "Assignee")
                         .WithMany()
-                        .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("AssigneeId");
 
                     b.HasOne("Helper.Domain.Entities.Category", "Category")
                         .WithMany()
@@ -193,9 +192,7 @@ namespace Helper.Domain.Migrations
 
                     b.HasOne("Helper.Domain.Entities.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("CreatorId");
 
                     b.Navigation("Assignee");
 
@@ -207,33 +204,24 @@ namespace Helper.Domain.Migrations
             modelBuilder.Entity("Helper.Domain.Entities.Message", b =>
                 {
                     b.HasOne("Helper.Domain.Entities.Job", "Job")
-                        .WithMany("Messages")
+                        .WithMany()
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Helper.Domain.Entities.User", "Receiver")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("ReceiverId");
 
                     b.HasOne("Helper.Domain.Entities.User", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("SenderId");
 
                     b.Navigation("Job");
 
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("Helper.Domain.Entities.Job", b =>
-                {
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,67 @@
+@model IEnumerable<Helper.Domain.Entities.User>
+
+<div class="admin-page_wrapper">
+    <div class="page_header">
+        <h1 class="page_title">Панель керування</h1>
+        <button class="button-back buttons">
+            <a asp-controller="Home" asp-action="Index">
+                назад
+            </a>
+        </button>
+    </div>
+    <div class="search">
+        <form asp-controller="Admin" asp-action="AdminPage" method="get">
+            <input type="text" name="search" placeholder="Пошук за ім'ям користувача" />
+            <button type="submit">Пошук</button>
+        </form>
+
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+    </div>
+    <div>
+        <table class="admin-page_table">
+            <thead>
+            <tr>
+                <th>Ім'я</th>
+                <th>#</th>
+                <th>Пошта</th>
+                <th>Місто</th>
+                <th>Зареєстровано</th>
+                <th>Останній вхід</th>
+                <th>Створено</th>
+                <th>Прийнято</th>
+                <th>Завершено</th>
+                <th>Скасовано</th>
+                <th>Дії</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Username</td>
+                    <td>@user.Id</td>
+                    <td>@user.Email</td>
+                    <td>@user.City</td>
+                    <td class="table_datetime">@user.RegisterDate.ToString("dd.MM.yy HH:mm")</td>
+                    <td class="table_datetime">@user.LastLoginDate.ToString("dd.MM.yy HH:mm")</td>
+                    <td>@user.CreatedJobs</td>
+                    <td>@user.AcceptedJobs</td>
+                    <td>@user.CompletedJobs</td>
+                    <td>@user.FailedJobs</td>
+                    <td>
+                        <a asp-controller="Admin" asp-action="AdminSubpage" asp-route-userId="@user.Id" class="table_button-view">Завдання</a>
+                        <form method="post" asp-action="DeleteUser" asp-route-userId="@user.Id">
+                            <button type="submit" class="table_button-delete buttons">
+                                <img src="~/images/icons/delete-trash.png" alt="delete">
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

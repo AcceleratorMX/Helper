@@ -1,14 +1,19 @@
+@{
+    var isAdmin = ViewData["IsAdmin"] as string;
+}
+
 <header class="header">
     <nav class="header_container">
         <div class="header_left-side">
             <div class="logo_container">
                 <a class="logo" asp-area="" asp-controller="Home" asp-action="Index">Helper</a>
             </div>
-            @if (User.Identity!.IsAuthenticated && User.Identity.Name == "admin")
+            @* @if (User.Identity!.IsAuthenticated && User.Identity.Name == "admin") *@
+            @if (User.Identity!.IsAuthenticated && isAdmin != null)
             {
-                <button class="header_links">
-                    <a asp-controller="Job" asp-action="CreateJob">Панель керування</a>
-                </button>
+            <button class="header_links">
+                <a asp-controller="Admin" asp-action="AdminPage">Панель керування</a>
+            </button>
             }
         </div>
 

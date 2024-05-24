@@ -1,0 +1,53 @@
+@model IEnumerable<Helper.Domain.Entities.Job>
+@{
+    ViewBag.Title = "Завдання користувача: " + ViewBag.UserName;
+}
+
+<div class="admin-page_wrapper">
+    <div class="admin-page_header">
+        <h1 class="page_title">@ViewBag.Title</h1>
+        <button class="button-back buttons">
+            <a asp-controller="Admin" asp-action="AdminPage">
+                назад
+            </a>
+        </button>
+
+    </div>
+    <table class="admin-page_table">
+        <thead>
+        <tr>
+            <th>Статус</th>
+            <th>#</th>
+            <th>Назва</th>
+            <th>Опис</th>
+            <th>Локація</th>
+            <th>Створено</th>
+            <th>Завершено</th>
+            <th>Категорія</th>
+            <th>Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.Status.GetDisplayName()</td>
+                <td>@job.Id</td>
+                <td>@job.Title</td>
+                <td>@job.Description</td>
+                <td>@job.Location</td>
+                <td class="table_datetime">@job.CreatedAt.ToString("dd.MM.yy HH:mm")</td>
+                <td class="table_datetime">@job.CompletedAt?.ToString("dd.MM.yy HH:mm")</td>
+                <td>@job.Category?.Title</td>
+                <td>
+                    <form method="post" asp-controller="Admin" asp-action="DeleteJob" asp-route-taskId="@job.Id">
+                        <button type="submit" class="table_button-delete buttons">
+                            <img src="~/images/icons/delete-trash.png" alt="delete">
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

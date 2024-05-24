@@ -1,20 +1,48 @@
 @model IEnumerable<Job>
 
-<ul class="list-group">
+<ul class="cards_container main-cards all-cards">
+    <h2 class="page_subtitle">Прийняті</h2>
     @foreach (var job in Model)
     {
-        <li class="list-group-item">
-            <h5>@job.Title</h5>
-            <p>@job.Description</p>
-            <p><strong>Статус:</strong> @job.Status.GetDisplayName()</p>
-            @if (job.Status == "InProgress")
-            {
-                <form asp-action="CancelJob" method="post">
-                    <input type="hidden" name="id" value="@job.Id" />
-                    <input type="submit" value="Відхилити виконання" class="btn btn-danger" />
-                </form>
-            }
+        <li class="card">
+            <article>
+                <div class="card_header main-card_header">
+                    <div class="card_title">
+                        <h2>@job.Title</h2>
+                    </div>
+                    <span class="card_job-id">#@job.Id</span>
+                </div>
+                <div class="main-card_main">
+                    <div class="card_sidebar">
+                        <span class="card_category">@job.Category!.Title</span>
+                        <div class="card_line-vertical"></div>
+                    </div>
+                    <div class="card_content">
+                        <p class="card_content-text">@job.Description</p>
+                    </div>
+                </div>
+                <hr class="card_line">
+                <div class="card_footer">
+                    <div class="card_about">
+                        <span class="card_location">@job.Location</span>
+                        <span class="card_date">@job.CreatedAt.ToString("dd.MM.yyyy")</span>
+                    </div>
+                    <hr class="card_line">
+                    <span>@job.Assignee</span>
+                    <span>
+                        <strong>Статус:</strong> @job.Status.GetDisplayName()
+                    </span>
+                    <div class="main-card_button">
+                        @if (job.Status == "InProgress")
+                        {
+                            <form asp-action="CancelJob" method="post">
+                                <input type="hidden" name="id" value="@job.Id"/>
+                                <button type="submit" value="Скасувати виконання" class="notifications-card_button btn-danger btn-assigned">Скасувати виконання</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </article>
         </li>
     }
 </ul>
-

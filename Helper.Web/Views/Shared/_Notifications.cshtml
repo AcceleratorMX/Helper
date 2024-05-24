@@ -1,7 +1,11 @@
 @model IEnumerable<NotificationViewModel>
 
+@{
+    var notificationsCount = ViewData["NotificationsCount"];
+}
+
 <aside>
-    <a class="notifications_indicator" href="#notifications_page">110</a>
+    <a class="notifications_indicator" href="#notifications_page">@notificationsCount</a>
 
     <div class="notifications_container" id="notifications_page">
         <div class="notifications_panel">

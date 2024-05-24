@@ -10,7 +10,7 @@ public class JobRepository(HelperDbContext context) : IRepository<Job, int>
     {
         return await context.Jobs.Include(job => job.Category).ToListAsync();
     }
-    
+
     public async Task<Job> GetByIdAsync(int id)
     {
         var job = await context.Jobs.Include(job => job.Category).FirstOrDefaultAsync(job => job.Id == id);
@@ -18,6 +18,7 @@ public class JobRepository(HelperDbContext context) : IRepository<Job, int>
         {
             throw new Exception($"JobModels with id {id} not found");
         }
+
         return job;
     }
 

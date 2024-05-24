@@ -13,7 +13,7 @@ public class CategoryRepository(HelperDbContext context) : IRepository<Category,
 
     public async Task<Category> GetByIdAsync(int id)
     {
-        return await context.Categories.FindAsync(id) ?? 
+        return await context.Categories.FindAsync(id) ??
                throw new Exception($"Category with id {id} not found");
     }
 

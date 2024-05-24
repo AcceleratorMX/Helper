@@ -1,6 +1,5 @@
 using Helper.Domain.Entities;
 using Helper.Domain.Repositories.Abstract;
-using Helper.Domain.Service;
 using Microsoft.EntityFrameworkCore;
 
 namespace Helper.Domain.Repositories.EntityFramework;
@@ -14,7 +13,7 @@ public class UserRepository(HelperDbContext context) : IRepository<User, Guid>
 
     public async Task<User> GetByIdAsync(Guid id)
     {
-        return await context.Users.FindAsync(id) ?? 
+        return await context.Users.FindAsync(id) ??
                throw new Exception($"User with id {id} not found");
     }
 

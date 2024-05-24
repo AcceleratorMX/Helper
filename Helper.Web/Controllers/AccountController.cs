@@ -14,16 +14,10 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
     : Controller
 {
     [HttpGet]
-    public IActionResult Register()
-    {
-        return View(new RegisterViewModel());
-    }
+    public IActionResult Register() => View(new RegisterViewModel());
 
     [HttpGet]
-    public IActionResult Login()
-    {
-        return View(new LoginViewModel());
-    }
+    public IActionResult Login() => View(new LoginViewModel());
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -40,17 +34,16 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
 
         if (user == null)
         {
-            ModelState.AddModelError(string.Empty, "Некоректні дані для входу");
+            ModelState.AddModelError("Username", "Користувач з таким ім'ям не існує!");
             return View("Login", model);
         }
         else if (!PasswordService.VerifyPassword(model.Password, user.Password!))
         {
-            ModelState.AddModelError(nameof(LoginViewModel.Password), "Некоректний пароль");
+            ModelState.AddModelError("NewPassword", "Не вірний пароль!");
             return View("Login", model);
         }
 
         user.LastLoginDate = DateTime.Now;
-        ;
         await userRepository.UpdateAsync(user);
 
         await AuthenticateAsync(user);
@@ -69,14 +62,12 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
 
         var existingUser = (await userRepository.GetAllAsync())
             .FirstOrDefault(u => u.Username.Equals(model.Username, StringComparison.OrdinalIgnoreCase));
+
         if (existingUser != null)
         {
-            ViewBag.Error = "Користувач з таким ім'ям вже існує";
+            ModelState.AddModelError(nameof(RegisterViewModel.Username), "Користувач з таким ім'ям вже існує");
             return View("Register", model);
         }
-
-        
-        
 
         var user = new User
         {
@@ -85,7 +76,6 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
         };
 
         await userRepository.CreateAsync(user);
-
         await AuthenticateAsync(user);
         return RedirectToAction("Index", "Home");
     }
@@ -115,19 +105,16 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
     {
         var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var user = await userRepository.GetByIdAsync(userId);
-        if (user == null)
-        {
-            throw new Exception($"User with id {userId} not found");
-        }
+
+        if (user == null) throw new Exception($"User with id {userId} not found");
 
         var model = ProfileViewModel(user);
-
         return View(model);
     }
 
     private static ProfileViewModel ProfileViewModel(User user)
     {
-        var model = new ProfileViewModel
+        return new ProfileViewModel
         {
             Id = user.Id,
             Username = user.Username,
@@ -140,23 +127,16 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
             CompletedJobs = user.CompletedJobs,
             FailedJobs = user.FailedJobs
         };
-        return model;
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            return View("Profile", model);
-        }
+        if (!ModelState.IsValid) return View("Profile", model);
 
         var user = await userRepository.GetByIdAsync(model.Id);
-        if (user == null)
-        {
-            throw new Exception($"User with id {model.Id} not found");
-        }
+        if (user == null) throw new Exception($"User with id {model.Id} not found");
 
         if (!string.IsNullOrWhiteSpace(model.Email) && model.Email != user.Email)
         {
@@ -169,20 +149,20 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
             }
         }
 
-        if (model.Email != user.Email)
-        {
-            user.Email = model.Email;
-            TempData["SuccessMessage"] = "Електронна пошта оновлена!";
-        }
-
-        if (model.City != user.City)
-        {
-            user.City = model.City;
-            TempData["SuccessMessage"] = "Місто оновлено!";
-        }
-
+        SuccessMessages(model, user);
         await userRepository.UpdateAsync(user);
         return RedirectToAction("Profile");
+    }
+
+    private void SuccessMessages(ProfileViewModel model, User user)
+    {
+        if (model.Email != user.Email) return;
+        user.Email = model.Email;
+        TempData["SuccessMessage"] = "Електронна пошта оновлена!";
+
+        if (model.City == user.City) return;
+        user.City = model.City;
+        TempData["SuccessMessage"] = "Місто оновлено!";
     }
 
     [HttpPost]
@@ -200,25 +180,24 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
             throw new Exception($"User with id {model.Id} not found");
         }
 
-        if (!string.IsNullOrWhiteSpace(model.OldPassword) && !string.IsNullOrWhiteSpace(model.Password))
+        if (string.IsNullOrWhiteSpace(model.OldPassword) || string.IsNullOrWhiteSpace(model.NewPassword))
+            return RedirectToAction("Profile");
+
+        if (!PasswordService.VerifyPassword(model.OldPassword, user.Password!))
         {
-            if (!PasswordService.VerifyPassword(model.OldPassword, user.Password!))
-            {
-                ModelState.AddModelError(nameof(model.OldPassword), "Старий пароль невірний");
-                return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
-            }
-
-            if (model.Password != model.RepeatPassword)
-            {
-                ModelState.AddModelError(nameof(model.RepeatPassword), "Паролі не співпадають");
-                return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
-            }
-
-            user.Password = PasswordService.HashPassword(model.Password);
-            TempData["SuccessMessage"] = "Пароль оновлено";
-            await userRepository.UpdateAsync(user);
+            ModelState.AddModelError(nameof(model.OldPassword), "Старий пароль невірний");
+            return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
         }
 
+        if (model.NewPassword != model.RepeatPassword)
+        {
+            ModelState.AddModelError(nameof(model.RepeatPassword), "Паролі не співпадають");
+            return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
+        }
+
+        user.Password = PasswordService.HashPassword(model.NewPassword);
+        TempData["SuccessMessage"] = "Пароль оновлено";
+        await userRepository.UpdateAsync(user);
         return RedirectToAction("Profile");
     }
 }

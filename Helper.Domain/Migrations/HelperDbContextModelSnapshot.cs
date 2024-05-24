@@ -43,7 +43,7 @@ namespace Helper.Domain.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Helper.Domain.Entities.JobModels", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.Job", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace Helper.Domain.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CreatorId")
+                    b.Property<Guid?>("CreatorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -107,10 +107,10 @@ namespace Helper.Domain.Migrations
                     b.Property<int>("JobId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ReceiverId")
+                    b.Property<Guid?>("ReceiverId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("SenderId")
+                    b.Property<Guid?>("SenderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Status")
@@ -175,12 +175,11 @@ namespace Helper.Domain.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Helper.Domain.Entities.JobModels", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.Job", b =>
                 {
                     b.HasOne("Helper.Domain.Entities.User", "Assignee")
                         .WithMany()
-                        .HasForeignKey("AssigneeId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .HasForeignKey("AssigneeId");
 
                     b.HasOne("Helper.Domain.Entities.Category", "Category")
                         .WithMany()
@@ -190,9 +189,7 @@ namespace Helper.Domain.Migrations
 
                     b.HasOne("Helper.Domain.Entities.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("CreatorId");
 
                     b.Navigation("Assignee");
 
@@ -203,34 +200,25 @@ namespace Helper.Domain.Migrations
 
             modelBuilder.Entity("Helper.Domain.Entities.Message", b =>
                 {
-                    b.HasOne("Helper.Domain.Entities.JobModels", "JobModels")
-                        .WithMany("Messages")
+                    b.HasOne("Helper.Domain.Entities.Job", "Job")
+                        .WithMany()
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Helper.Domain.Entities.User", "Receiver")
                         .WithMany()
-                        .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("ReceiverId");
 
                     b.HasOne("Helper.Domain.Entities.User", "Sender")
                         .WithMany()
-                        .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("SenderId");
 
-                    b.Navigation("JobModels");
+                    b.Navigation("Job");
 
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("Helper.Domain.Entities.JobModels", b =>
-                {
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,22 +1,21 @@
 @model CreateMessageViewModel
 
 @{
-ViewData["Title"] = "Створити";
+    ViewData["Title"] = "Створити";
 }
 
-<div class="add-form">
-    <form asp-controller="Message" asp-action="CreateMessage" class="message-form">
-
-        <h2>Завдання: @Model.JobTitle (#@Model.JobId)</h2>
-        <p>Для @Model.CreatorName:</p>
-        <div class="form-group">
-            <input type="hidden" asp-for="JobId" />
-            <label asp-for="Text">Текст повідомлення</label>
-            <textarea asp-for="Text" class="input-message-name" placeholder="Опишіть, чому саме ви. Та залиште контакти."></textarea>
-            <span asp-validation-for="Text" class="validation-error"></span>
+<div class="create-edit-page_wrapper">
+    <h1 class="page_title">Надіслати повідомлення</h1>
+    <form asp-controller="Message" asp-action="CreateMessage" method="post" class="form_container create-edit-form_container">
+        <div class="input_container">
+            <input type="hidden" asp-for="JobId"/>
+            <label asp-for="Text" class="input_label create-message_title">Завдання: @Model.JobTitle (#@Model.JobId)</label>
+            <textarea asp-for="Text" class="input_field" placeholder="Опишіть, чому саме ви. Та залиште контакти."></textarea>
+            <span asp-validation-for="Text" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn">Відправити</button>
-        <a asp-controller="Home" asp-action="Index">Назад</a>
-        
+
+        <div class="form-button_container">
+            <button type="submit" value="Відправити" class="form_button-submit">Відправити</button>
+        </div>
     </form>
 </div>
