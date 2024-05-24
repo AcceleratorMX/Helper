@@ -1,3 +1,6 @@
+@{
+    ViewData["Title"] = "Мої завдання";
+}
 
 <div class="all-jobs-page_wrapper">
     <div class="page_header">
@@ -9,18 +12,11 @@
         </button>
     </div>
     <div class="all-jobs_container">
-
         <div>
             @await Html.PartialAsync("_CreatedJobs", ViewBag.CreatedJobs, null)
         </div>
-           
-
-
         <div>
             @await Html.PartialAsync("_AssignedJobs", ViewBag.AssignedJobs, null)
         </div>
-            
-         
-
     </div>
 </div>

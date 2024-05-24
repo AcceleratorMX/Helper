@@ -14,7 +14,7 @@ public class CategoryRepository(HelperDbContext context) : IRepository<Category,
     public async Task<Category> GetByIdAsync(int id)
     {
         return await context.Categories.FindAsync(id) ??
-               throw new Exception($"Category with id {id} not found");
+               throw new Exception($"CategoryModels with id {id} not found");
     }
 
     public async Task CreateAsync(Category entity)

@@ -12,7 +12,8 @@ public class HomeController(
     IRepository<Job, int> jobRepository,
     IRepository<Message, long> messageRepository,
     IRepository<User, Guid> userRepository,
-    IRepository<Category, int> categoryRepository)
+    IRepository<Category, int> categoryRepository,
+    ValidationService validationService)
     : Controller
 {
     public async Task<IActionResult> Index(string? category = null)
@@ -20,7 +21,7 @@ public class HomeController(
         await GetCategories();
         var jobs = await GetJobs(category);
 
-        ViewData["IsAdmin"] = ValidationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!)
+        ViewData["IsAdmin"] = validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!)
             ? User.FindFirstValue(ClaimTypes.NameIdentifier)!
             : null;
 

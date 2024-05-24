@@ -71,12 +71,12 @@
                 <div class="input_container">
                     <label asp-for="Email" class="input_label">Електронна адреса:</label>
                     <input asp-for="Email" type="email" class="input_field"/>
-                    <span asp-validation-for="Email" class="text-danger profile_text-danger"></span>
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="input_container">
                     <label asp-for="City" class="input_label">Місто:</label>
                     <input asp-for="City" class="input_field"/>
-                    <span asp-validation-for="City" class="text-danger profile_text-danger"></span>
+                    <span asp-validation-for="City" class="text-danger"></span>
                 </div>
                 <div class="form-button_container">
                     <button type="submit" class="form_button-submit buttons">оновити дані</button>
@@ -87,18 +87,18 @@
                 <input type="hidden" asp-for="Id"/>
                 <div class="input_container">
                     <label asp-for="OldPassword" class="input_label">Старий пароль:</label>
-                    <input type="password" asp-for="OldPassword" class="input_field"/>
-                    <span asp-validation-for="OldPassword" class="text-danger profile_text-danger"></span>
+                    <input type="password" asp-for="OldPassword" class="input_field" placeholder="Введіть старий пароль..."/>
+                    <span asp-validation-for="OldPassword" class="text-danger"></span>
                 </div>
                 <div class="input_container">
                     <label asp-for="NewPassword" class="input_label">Новий пароль:</label>
-                    <input type="password" asp-for="NewPassword" class="input_field"/>
-                    <span asp-validation-for="NewPassword" class="text-danger profile_text-danger"></span>
+                    <input type="password" asp-for="NewPassword" class="input_field" placeholder="Введіть новий пароль..."/>
+                    <span asp-validation-for="NewPassword" class="text-danger"></span>
                 </div>
                 <div class="input_container">
                     <label asp-for="RepeatPassword" class="input_label">Повторіть новий пароль:</label>
-                    <input type="password" asp-for="RepeatPassword" class="input_field"/>
-                    <span asp-validation-for="RepeatPassword" class="text-danger profile_text-danger"></span>
+                    <input type="password" asp-for="RepeatPassword" class="input_field" placeholder="Підтвердіть новий пароль..."/>
+                    <span asp-validation-for="RepeatPassword" class="text-danger"></span>
                 </div>
                 <div class="form-button_container">
                     <button type="submit" class="form_button-submit buttons">Зберегти пароль</button>

@@ -373,10 +373,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: inherit;
+    background-color: var(--light-color);
 }
 
 .card_job-id {
-    font-style: italic;
     text-align: right;
     position: absolute;
     right: 0.5rem;
@@ -425,11 +426,9 @@ body {
 }
 
 .card_category {
-    display: inline-block;
     font-size: 0.9rem;
     font-weight: bold;
     text-transform: uppercase;
-    margin: 0 auto;
 }
 
 
@@ -656,7 +655,6 @@ body {
 /* #endregion */
 
 /* #region admin-page */
-
 .admin-page_wrapper {
     width: 100%;
     display: flex;
@@ -677,7 +675,6 @@ body {
 
 .admin-page_table table {
     width: 100%;
-    border-collapse: collapse;
 }
 
 .admin-page_table th,
@@ -708,6 +705,29 @@ body {
 .table_datetime {
     font-size: 0.8rem;
     font-weight: bold;
+}
+
+.create-category-form_container {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: row;
+    align-items: center;
+}
+
+.admin-page-form_title {
+    width: 20rem;
+}
+.admin-page-form_description {
+    width: 40rem;
+}
+
+.search {
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-field {
+    margin-bottom: 0.5rem;
 }
 
 /* #endregion */
@@ -818,6 +838,18 @@ body {
 
 .delete-icon:hover {
     filter: opacity(0.5);
+}
+
+.admin-page-button_submit {
+    padding: 0.55rem;
+    margin-bottom: 0.5rem;
+    background-color: var(--elements-color);
+    color: var(--light-color);
+    border-radius: var(--border-radius);
+}
+
+.admin-page-button_submit:hover {
+    background-color: var(--green-color);
 }
 
 /* #endregion */

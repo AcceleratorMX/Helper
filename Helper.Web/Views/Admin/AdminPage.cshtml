@@ -1,24 +1,35 @@
-@model IEnumerable<Helper.Domain.Entities.User>
+@model IEnumerable<User>
+
+@{
+    ViewData["Title"] = "Панель керування";
+}
 
 <div class="admin-page_wrapper">
     <div class="page_header">
         <h1 class="page_title">Панель керування</h1>
-        <button class="button-back buttons">
+        <button class="buttons button-back">
             <a asp-controller="Home" asp-action="Index">
                 назад
             </a>
         </button>
     </div>
     <div class="search">
-        <form asp-controller="Admin" asp-action="AdminPage" method="get">
-            <input type="text" name="search" placeholder="Пошук за ім'ям користувача" />
-            <button type="submit">Пошук</button>
-        </form>
+        <div class="input_container">
+            <form asp-controller="Admin" asp-action="AdminPage" method="get" class="create-category-form_container">
+                <input type="text" name="search" class="input_field admin-page-form_title  search-field" placeholder="Пошук за ім'ям користувача" />
+                <button type="submit" class="buttons admin-page-button_submit">Пошук</button>
+            </form>
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="text-danger">@ViewBag.ErrorMessage</div>
+            }
+        </div>
 
-        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-        {
-        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
-        }
+        <button class="admin-page-button_submit buttons">
+            <a asp-controller="Category" asp-action="CategoryEditor">
+                Редактор категорій
+            </a>
+        </button>
     </div>
     <div>
         <table class="admin-page_table">

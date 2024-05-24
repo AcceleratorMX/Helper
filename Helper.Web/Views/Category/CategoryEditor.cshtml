@@ -1,0 +1,60 @@
+@model CategoryViewModel
+
+@{
+    ViewData["Title"] = "Категорії";
+}
+
+<div class="admin-page_wrapper">
+    <div class="admin-page_header">
+        <h1 class="page_title">Категорії</h1>
+        <button class="button-back buttons">
+            <a asp-controller="Admin" asp-action="AdminPage">
+                назад
+            </a>
+        </button>
+    </div>
+
+    <form asp-controller="Category" asp-action="Create" method="post" class="create-category-form_container">
+        <div class="input_container">
+            <label asp-for="Title" hidden>Назва</label>
+            <input asp-for="Title" class="input_field admin-page-form_title" placeholder="Назва..."/>
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="input_container">
+            <label asp-for="Description" hidden>Опис</label>
+            <input asp-for="Description" class="input_field admin-page-form_description" placeholder="Опис..."></input>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <button type="submit" class="buttons admin-page-button_submit">Створити</button>
+
+    </form>
+    
+    <table class="admin-page_table categories_table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Назва</th>
+            <th>Опис</th>
+            <th>Дія</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var category in Model.Categories)
+        {
+            <tr>
+                <td>@category.Id</td>
+                <td>@category.Title</td>
+                <td>@category.Description</td>
+                <td>
+                    <form method="post" asp-action="Delete" asp-route-userId="@category.Id">
+                        <input hidden name="id" value="@category.Id"/>
+                        <button type="submit" class="table_button-delete buttons">
+                            <img src="~/images/icons/delete-trash.png" alt="delete">
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

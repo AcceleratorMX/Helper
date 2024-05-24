@@ -12,7 +12,8 @@ public class AdminController(
     IRepository<Job, int> jobRepository,
     IRepository<Category, int> categoryRepository,
     IRepository<User, Guid> userRepository,
-    IRepository<Message, long> messageRepository)
+    IRepository<Message, long> messageRepository,
+    ValidationService validationService)
     : Controller
 {
     private readonly IRepository<Category, int> _categoryRepository = categoryRepository;
@@ -21,8 +22,8 @@ public class AdminController(
 
     public async Task<IActionResult> AdminPage(string? search)
     {
-        if (IsAdmin(out var actionResult))
-            return actionResult;
+        if (!validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
+            return RedirectToAction("Index", "Home");
 
         var usersWithoutAdmin = await GetUsersWithoutAdmin();
 
@@ -85,22 +86,23 @@ public class AdminController(
     // }
 
 
-    private bool IsAdmin(out IActionResult actionResult)
-    {
-        if (ValidationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
-        {
-            actionResult = null!;
-            return false;
-        }
-
-        actionResult = RedirectToAction("Index", "Home");
-        return true;
-    }
+    // private bool IsAdmin(out IActionResult actionResult)
+    // {
+    //     if (validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
+    //     {
+    //         actionResult = null!;
+    //         return false;
+    //     }
+    //
+    //     actionResult = RedirectToAction("Index", "Home");
+    //     return true;
+    // }
 
     [HttpPost]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
-        if (IsAdmin(out var actionResult)) return actionResult;
+        if (!validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
+            return RedirectToAction("Index", "Home");
 
         var userJobs = (await jobRepository.GetAllAsync())
             .Where(job => job.AssigneeId == userId || job.CreatorId == userId)
@@ -144,7 +146,8 @@ public class AdminController(
 
     public async Task<IActionResult> AdminSubpage(Guid userId)
     {
-        if (IsAdmin(out var actionResult)) return actionResult;
+        if (!validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
+            return RedirectToAction("Index", "Home");
 
         var user = await userRepository.GetByIdAsync(userId);
         var jobs = await GetJobs(userId);
@@ -166,7 +169,8 @@ public class AdminController(
     [HttpPost]
     public async Task<IActionResult> DeleteJob(int taskId)
     {
-        if (IsAdmin(out var actionResult)) return actionResult;
+        if (!validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
+            return RedirectToAction("Index", "Home");
 
         var job = await jobRepository.GetByIdAsync(taskId);
 

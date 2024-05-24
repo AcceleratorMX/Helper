@@ -38,9 +38,9 @@ public class JobController(
 
         var job = new Job
         {
-            Title = model.Title,
-            Description = model.Description,
-            Location = model.Location,
+            Title = model.Title!,
+            Description = model.Description!,
+            Location = model.Location!,
             CategoryId = model.CategoryId,
             CreatorId = Guid.Parse(activeUserId!)
         };

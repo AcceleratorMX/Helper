@@ -129,6 +129,42 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
         };
     }
 
+    // [HttpPost]
+    // [ValidateAntiForgeryToken]
+    // public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
+    // {
+    //     if (!ModelState.IsValid) return View("Profile", model);
+    //
+    //     var user = await userRepository.GetByIdAsync(model.Id);
+    //     if (user == null) throw new Exception($"User with id {model.Id} not found");
+    //
+    //     if (!string.IsNullOrWhiteSpace(model.Email) && model.Email != user.Email)
+    //     {
+    //         var existingUser = (await userRepository.GetAllAsync())
+    //             .FirstOrDefault(u => u.Email!.Equals(model.Email, StringComparison.OrdinalIgnoreCase));
+    //         if (existingUser != null)
+    //         {
+    //             ModelState.AddModelError(nameof(model.Email), "Така адреса вже існує");
+    //             return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
+    //         }
+    //     }
+    //
+    //     SuccessMessages(model, user);
+    //     await userRepository.UpdateAsync(user);
+    //     return RedirectToAction("Profile");
+    // }
+    //
+    // private void SuccessMessages(ProfileViewModel model, User user)
+    // {
+    //     if (model.Email != user.Email) return;
+    //     user.Email = model.Email;
+    //     TempData["SuccessMessage"] = "Електронна пошта оновлена!";
+    //
+    //     if (model.City == user.City) return;
+    //     user.City = model.City;
+    //     TempData["SuccessMessage"] = "Місто оновлено!";
+    // }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
@@ -137,6 +173,8 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
 
         var user = await userRepository.GetByIdAsync(model.Id);
         if (user == null) throw new Exception($"User with id {model.Id} not found");
+
+        bool isUpdated = false;
 
         if (!string.IsNullOrWhiteSpace(model.Email) && model.Email != user.Email)
         {
@@ -147,23 +185,29 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
                 ModelState.AddModelError(nameof(model.Email), "Така адреса вже існує");
                 return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
             }
+            else
+            {
+                user.Email = model.Email;
+                TempData["SuccessMessage"] = "Електронна пошта оновлена!";
+                isUpdated = true;
+            }
         }
 
-        SuccessMessages(model, user);
-        await userRepository.UpdateAsync(user);
+        if (model.City != user.City)
+        {
+            user.City = model.City;
+            TempData["SuccessMessage"] = "Місто оновлено!";
+            isUpdated = true;
+        }
+
+        if (isUpdated)
+        {
+            await userRepository.UpdateAsync(user);
+        }
+
         return RedirectToAction("Profile");
     }
 
-    private void SuccessMessages(ProfileViewModel model, User user)
-    {
-        if (model.Email != user.Email) return;
-        user.Email = model.Email;
-        TempData["SuccessMessage"] = "Електронна пошта оновлена!";
-
-        if (model.City == user.City) return;
-        user.City = model.City;
-        TempData["SuccessMessage"] = "Місто оновлено!";
-    }
 
     [HttpPost]
     [ValidateAntiForgeryToken]

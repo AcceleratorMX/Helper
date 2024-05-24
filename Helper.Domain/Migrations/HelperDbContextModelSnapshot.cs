@@ -22,7 +22,7 @@ namespace Helper.Domain.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Helper.Domain.Entities.Category", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.CategoryModels", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -181,7 +181,7 @@ namespace Helper.Domain.Migrations
                         .WithMany()
                         .HasForeignKey("AssigneeId");
 
-                    b.HasOne("Helper.Domain.Entities.Category", "Category")
+                    b.HasOne("Helper.Domain.Entities.CategoryModels", "CategoryModels")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -193,7 +193,7 @@ namespace Helper.Domain.Migrations
 
                     b.Navigation("Assignee");
 
-                    b.Navigation("Category");
+                    b.Navigation("CategoryModels");
 
                     b.Navigation("Creator");
                 });
