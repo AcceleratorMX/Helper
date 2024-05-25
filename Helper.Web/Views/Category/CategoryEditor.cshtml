@@ -14,19 +14,20 @@
         </button>
     </div>
 
-    <form asp-controller="Category" asp-action="Create" method="post" class="create-category-form_container">
+    <form asp-controller="Category" asp-action="CreateCategory" method="post" class="create-category-form_container">
         <div class="input_container">
             <label asp-for="Title" hidden>Назва</label>
             <input asp-for="Title" class="input_field admin-page-form_title" placeholder="Назва..."/>
-            <span asp-validation-for="Title" class="text-danger"></span>
+            
         </div>
         <div class="input_container">
             <label asp-for="Description" hidden>Опис</label>
             <input asp-for="Description" class="input_field admin-page-form_description" placeholder="Опис..."></input>
-            <span asp-validation-for="Description" class="text-danger"></span>
+            
         </div>
         <button type="submit" class="buttons admin-page-button_submit">Створити</button>
-
+        <span asp-validation-for="Title" class="text-danger"></span>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </form>
     
     <table class="admin-page_table categories_table">
@@ -46,7 +47,7 @@
                 <td>@category.Title</td>
                 <td>@category.Description</td>
                 <td>
-                    <form method="post" asp-action="Delete" asp-route-userId="@category.Id">
+                    <form method="post" asp-controller="Category" asp-action="Delete" asp-route-userId="@category.Id">
                         <input hidden name="id" value="@category.Id"/>
                         <button type="submit" class="table_button-delete buttons">
                             <img src="~/images/icons/delete-trash.png" alt="delete">

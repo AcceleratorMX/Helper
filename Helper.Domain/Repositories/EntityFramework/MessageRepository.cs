@@ -10,11 +10,18 @@ public class MessageRepository(HelperDbContext context) : IRepository<Message, l
     {
         return await context.Messages.ToListAsync();
     }
+    
+    public async Task<IEnumerable<Message>> GetMessagesByJobIdAsync(int jobId)
+    {
+        return await context.Messages
+            .Where(m => m.JobId == jobId)
+            .ToListAsync();
+    }
 
     public async Task<Message> GetByIdAsync(long id)
     {
         return await context.Messages.FindAsync(id) ??
-               throw new Exception($"Message with id {id} not found");
+               throw new Exception($"MessageModels with id {id} not found");
     }
 
     public async Task CreateAsync(Message entity)
@@ -38,7 +45,7 @@ public class MessageRepository(HelperDbContext context) : IRepository<Message, l
     public Task DeleteAsync(long id)
     {
         var message = context.Messages.Find(id);
-        context.Messages.Remove(message ?? throw new Exception($"Message with id {id} not found"));
+        context.Messages.Remove(message ?? throw new Exception($"MessageModels with id {id} not found"));
         return context.SaveChangesAsync();
     }
 }

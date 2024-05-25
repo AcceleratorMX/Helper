@@ -1,4 +1,4 @@
-@model ProfileViewModel
+@model Helper.Web.Models.AccountModels.ProfileViewModel
 
 @{
     ViewBag.Title = "Профіль користувача";
@@ -6,6 +6,7 @@
 <div class="profile-page_wrapper">
     <div class="page_header">
         <h1 class="page_title">Загальна інформація</h1>
+
         <button class="button-back buttons">
             <a asp-controller="Home" asp-action="Index">
                 назад
@@ -58,12 +59,14 @@
             </tbody>
         </table>
 
-        @if (TempData["SuccessMessage"] != null)
-        {
+        <div class="alert-success_container">
+            @if (TempData["SuccessMessage"] != null)
+            {
             <div class="alert-success" role="alert">
                 @TempData["SuccessMessage"]
             </div>
-        }
+            }
+        </div>
 
         <div class="update-contact-data">
             <form asp-action="UpdateProfile" method="post" class="profile-page-form_container">

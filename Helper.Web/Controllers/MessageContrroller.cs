@@ -1,9 +1,10 @@
 using Helper.Domain.Entities;
 using Helper.Domain.Repositories.Abstract;
-using Helper.Web.Models.Message;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Helper.Domain.Entities.Abstract;
+using Helper.Domain.Service;
+using Helper.Web.Models.MessageModels;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Helper.Web.Controllers;
@@ -12,9 +13,12 @@ namespace Helper.Web.Controllers;
 public class MessageController(
     IRepository<Message, long> messageRepository,
     IRepository<Job, int> jobRepository,
-    IRepository<User, Guid> userRepository)
+    IRepository<User, Guid> userRepository,
+    ValidationService validationService)
     : Controller
 {
+    private const int Limit = 5;
+    
     public async Task<IActionResult> CreateMessage(int jobId)
     {
         var job = await jobRepository.GetByIdAsync(jobId);
@@ -37,8 +41,9 @@ public class MessageController(
     {
         var activeUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid || validationService.IsHasMoreSpaces(model.Text, Limit))
         {
+            ModelState.AddModelError("Text", $"Повідомлення не повинно містити {Limit} або більше пробілів підряд!");
             return View(model);
         }
 
@@ -47,14 +52,14 @@ public class MessageController(
         var message = new Message
         {
             JobId = model.JobId,
-            Text = model.Text,
+            Text = model.Text.Trim(),
             CreatedAt = DateTime.Now,
             SenderId = activeUserId,
             ReceiverId = job.CreatorId!.Value
         };
 
         await messageRepository.CreateAsync(message);
-
+        
         return RedirectToAction("Index", "Home");
     }
 
@@ -73,7 +78,7 @@ public class MessageController(
         await jobRepository.UpdateAsync(job);
 
         var user = await userRepository.GetByIdAsync(message.SenderId!.Value);
-
+        
         user.AcceptedJobs++;
         await userRepository.UpdateAsync(user);
 
@@ -84,10 +89,10 @@ public class MessageController(
     public async Task<IActionResult> RejectMessage(long messageId)
     {
         var message = await messageRepository.GetByIdAsync(messageId);
-
+        
         message.Status = MessageStatuses.Rejected.ToString();
         await messageRepository.UpdateAsync(message);
-
+        
         return RedirectToAction("Index", "Home");
     }
 }

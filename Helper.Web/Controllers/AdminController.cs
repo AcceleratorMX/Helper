@@ -3,6 +3,7 @@ using Helper.Domain.Repositories.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Helper.Domain.Entities.Abstract;
 using Helper.Domain.Service;
 
 namespace Helper.Web.Controllers;
@@ -52,51 +53,10 @@ public class AdminController(
         }
         else
         {
-            ViewBag.ErrorMessage = "Користувача з таким ім'ям не знайдено.";
+            ViewData.ModelState.AddModelError(string.Empty,"Користувача з таким ім'ям не знайдено: " + search);
             return users;
         }
     }
-
-    
-    
-    // public async Task<IActionResult> AdminPage(string? search)
-    // {
-    //     if (IsAdmin(out var actionResult))
-    //         return actionResult;
-    //
-    //     var users = await userRepository.GetAllAsync();
-    //     var sortedUsers = users
-    //         .Where(u => u.Username != "admin")
-    //         .OrderBy(u => u.Username)
-    //         .ToList();
-    //
-    //     if (!string.IsNullOrEmpty(search))
-    //     {
-    //         sortedUsers = sortedUsers
-    //             .Where(u => u.Username.Equals(search, StringComparison.CurrentCultureIgnoreCase))
-    //             .ToList();
-    //
-    //         if (sortedUsers.Count == 0)
-    //         {
-    //             ViewBag.ErrorMessage = "Користувача з таким ім'ям не знайдено.";
-    //         }
-    //     }
-    //
-    //     return View(sortedUsers);
-    // }
-
-
-    // private bool IsAdmin(out IActionResult actionResult)
-    // {
-    //     if (validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
-    //     {
-    //         actionResult = null!;
-    //         return false;
-    //     }
-    //
-    //     actionResult = RedirectToAction("Index", "Home");
-    //     return true;
-    // }
 
     [HttpPost]
     public async Task<IActionResult> DeleteUser(Guid userId)
@@ -144,7 +104,7 @@ public class AdminController(
         return RedirectToAction(nameof(AdminPage));
     }
 
-    public async Task<IActionResult> AdminSubpage(Guid userId)
+    public async Task<IActionResult> AllUsersPage(Guid userId)
     {
         if (!validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
             return RedirectToAction("Index", "Home");
@@ -160,22 +120,22 @@ public class AdminController(
     {
         return (await jobRepository.GetAllAsync())
             .Where(t => t.AssigneeId == userId || t.CreatorId == userId)
-            .OrderBy(t => t.Status == "InProgress")
-            .ThenBy(t => t.Status == "Active")
-            .ThenBy(t => t.Status == "Completed")
+            .OrderBy(t => t.Status == JobStatuses.InProgress.ToString())
+            .ThenBy(t => t.Status == JobStatuses.Active.ToString())  
+            .ThenBy(t => t.Status == JobStatuses.Completed.ToString())
             .ToList();
     }
 
     [HttpPost]
-    public async Task<IActionResult> DeleteJob(int taskId)
+    public async Task<IActionResult> DeleteUserJob(int jobId)
     {
         if (!validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
             return RedirectToAction("Index", "Home");
 
-        var job = await jobRepository.GetByIdAsync(taskId);
+        var job = await jobRepository.GetByIdAsync(jobId);
 
         var userId = job.AssigneeId ?? job.CreatorId;
-        await jobRepository.DeleteAsync(taskId);
-        return RedirectToAction(nameof(AdminSubpage), new { userId });
+        await jobRepository.DeleteAsync(jobId);
+        return RedirectToAction(nameof(AllUsersPage), new { userId });
     }
 }

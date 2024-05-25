@@ -2,7 +2,7 @@
 using Helper.Domain.Entities;
 using Helper.Domain.Repositories.Abstract;
 using Helper.Domain.Service;
-using Helper.Web.Models.Account;
+using Helper.Web.Models.AccountModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +39,7 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
         }
         else if (!PasswordService.VerifyPassword(model.Password, user.Password!))
         {
-            ModelState.AddModelError("NewPassword", "Не вірний пароль!");
+            ModelState.AddModelError("Password", "Не вірний пароль!");
             return View("Login", model);
         }
 
@@ -49,6 +49,7 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
         await AuthenticateAsync(user);
         return RedirectToAction("Index", "Home");
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -129,42 +130,6 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
         };
     }
 
-    // [HttpPost]
-    // [ValidateAntiForgeryToken]
-    // public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
-    // {
-    //     if (!ModelState.IsValid) return View("Profile", model);
-    //
-    //     var user = await userRepository.GetByIdAsync(model.Id);
-    //     if (user == null) throw new Exception($"User with id {model.Id} not found");
-    //
-    //     if (!string.IsNullOrWhiteSpace(model.Email) && model.Email != user.Email)
-    //     {
-    //         var existingUser = (await userRepository.GetAllAsync())
-    //             .FirstOrDefault(u => u.Email!.Equals(model.Email, StringComparison.OrdinalIgnoreCase));
-    //         if (existingUser != null)
-    //         {
-    //             ModelState.AddModelError(nameof(model.Email), "Така адреса вже існує");
-    //             return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
-    //         }
-    //     }
-    //
-    //     SuccessMessages(model, user);
-    //     await userRepository.UpdateAsync(user);
-    //     return RedirectToAction("Profile");
-    // }
-    //
-    // private void SuccessMessages(ProfileViewModel model, User user)
-    // {
-    //     if (model.Email != user.Email) return;
-    //     user.Email = model.Email;
-    //     TempData["SuccessMessage"] = "Електронна пошта оновлена!";
-    //
-    //     if (model.City == user.City) return;
-    //     user.City = model.City;
-    //     TempData["SuccessMessage"] = "Місто оновлено!";
-    // }
-
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
@@ -176,16 +141,16 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
 
         bool isUpdated = false;
 
-        if (!string.IsNullOrWhiteSpace(model.Email) && model.Email != user.Email)
+        if (!string.IsNullOrWhiteSpace(model.Email))
         {
             var existingUser = (await userRepository.GetAllAsync())
-                .FirstOrDefault(u => u.Email!.Equals(model.Email, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(u => u.Email!.Equals(model.Email, StringComparison.OrdinalIgnoreCase) && u.Id != model.Id);
             if (existingUser != null)
             {
                 ModelState.AddModelError(nameof(model.Email), "Така адреса вже існує");
                 return View("Profile", ProfileViewModel(await userRepository.GetByIdAsync(model.Id)));
             }
-            else
+            else if (model.Email != user.Email)
             {
                 user.Email = model.Email;
                 TempData["SuccessMessage"] = "Електронна пошта оновлена!";
@@ -207,6 +172,7 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
 
         return RedirectToAction("Profile");
     }
+
 
 
     [HttpPost]

@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+using Helper.Domain.Entities;
 
 namespace Helper.Web.Models.JobModels;
 
@@ -22,5 +22,17 @@ public class CreateEditJobViewModel
     [Range(1, int.MaxValue, ErrorMessage = "Оберіть категорію!")]
     public int CategoryId { get; set; }
 
-    public Domain.Entities.Category? Category { get; set; }
+    public Category? Category { get; set; }
+    
+    public Guid CreatorId { get; set; }
+    
+    public User? Creator { get; set; }
+    
+    public Guid AssigneeId { get; set; }
+    
+    public User? Assignee { get; set; }
+    
+    public long MessageId { get; set; }
+    
+    public Message? Message { get; set; }
 }

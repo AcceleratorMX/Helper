@@ -93,7 +93,7 @@ namespace Helper.Domain.Migrations
                     b.ToTable("Jobs");
                 });
 
-            modelBuilder.Entity("Helper.Domain.Entities.Message", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.MessageModels", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -198,7 +198,7 @@ namespace Helper.Domain.Migrations
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("Helper.Domain.Entities.Message", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.MessageModels", b =>
                 {
                     b.HasOne("Helper.Domain.Entities.Job", "Job")
                         .WithMany()

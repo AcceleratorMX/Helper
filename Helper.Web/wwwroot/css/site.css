@@ -1,5 +1,10 @@
 @import url(reset.css);
 
+@font-face {
+    font-family: 'Leckerli One';
+    src: url('../fonts/LeckerliOne-Regular.ttf') format('truetype');
+}
+
 :root {
     --primary-color: rgb(192, 221, 255);
     --links-hover-color: #6c757d;
@@ -71,9 +76,11 @@ body {
 }
 
 .logo {
+    font-family: Leckerli One, cursive;
     font-size: 2.2rem;
     font-weight: 700;
     display: inline-block;
+    
 }
 
 .nav_items {
@@ -559,7 +566,7 @@ body {
     border-radius: var(--border-radius);
     box-shadow: var(--elements-color);
     padding: 1rem;
-    max-width: 10%;
+    max-width: 35%;
     width: 100%;
     text-overflow: ellipsis;
     overflow-y: hidden;
@@ -567,7 +574,8 @@ body {
 
 .main-info_left-column {
     text-align: left;
-    padding-right: 1rem;
+
+    
 }
 
 .main-info_left-column,
@@ -595,10 +603,9 @@ body {
 }
 
 .alert-success {
-    position: absolute;
-    transform: translate(25.2vw, 25vh);
     font-size: 2rem;
     font-weight: bold;
+
     color: var(--green-color);
     text-shadow: -2px -2px 0 #fff,
     2px -2px 0 #fff,
@@ -663,6 +670,7 @@ body {
 }
 
 .admin-page_table {
+    margin-top: 0.5rem;
     width: 100%;
     border-collapse: collapse;
 }
@@ -715,7 +723,7 @@ body {
 }
 
 .admin-page-form_title {
-    width: 20rem;
+    width: 12rem;
 }
 .admin-page-form_description {
     width: 40rem;
@@ -727,7 +735,7 @@ body {
 }
 
 .search-field {
-    margin-bottom: 0.5rem;
+
 }
 
 /* #endregion */
@@ -831,8 +839,10 @@ body {
 }
 
 .delete-icon {
-    border: 0.2rem solid;
+    display: block;
+    margin: 0.5rem auto;
     padding: 0.6rem;
+    background-color: var(--light-color);
     border-radius: 50%;
 }
 
@@ -842,7 +852,6 @@ body {
 
 .admin-page-button_submit {
     padding: 0.55rem;
-    margin-bottom: 0.5rem;
     background-color: var(--elements-color);
     color: var(--light-color);
     border-radius: var(--border-radius);

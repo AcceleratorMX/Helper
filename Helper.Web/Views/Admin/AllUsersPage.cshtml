@@ -40,7 +40,8 @@
                 <td class="table_datetime">@job.CompletedAt?.ToString("dd.MM.yy HH:mm")</td>
                 <td>@job.Category?.Title</td>
                 <td>
-                    <form method="post" asp-controller="Admin" asp-action="DeleteJob" asp-route-taskId="@job.Id">
+                    <form method="post" asp-controller="Admin" asp-action="DeleteUserJob" asp-route-taskId="@job.Id">
+                        <input type="hidden" name="jobId" value="@job.Id" />
                         <button type="submit" class="table_button-delete buttons">
                             <img src="~/images/icons/delete-trash.png" alt="delete">
                         </button>

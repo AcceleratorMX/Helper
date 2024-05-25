@@ -31,6 +31,7 @@ builder.Services.AddScoped<IRepository<Category, int>, CategoryRepository>();
 builder.Services.AddScoped<IRepository<Job, int>, JobRepository>();
 builder.Services.AddScoped<IRepository<Message, long>, MessageRepository>();
 builder.Services.AddScoped<ValidationService>();
+builder.Services.AddScoped<JobService>();
 
 
 var app = builder.Build();

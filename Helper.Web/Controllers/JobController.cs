@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using Helper.Domain.Entities;
+using Helper.Domain.Entities.Abstract;
 using Helper.Domain.Repositories.Abstract;
+using Helper.Domain.Service;
 using Helper.Web.Models.JobModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +14,14 @@ namespace Helper.Web.Controllers;
 public class JobController(
     IRepository<Job, int> jobRepository,
     IRepository<Category, int> categoryRepository,
-    IRepository<User, Guid> userRepository)
+    IRepository<User, Guid> userRepository,
+    IRepository<Message, long> messageRepository,
+    ValidationService validationService,
+    JobService jobService)
     : Controller
 {
+    private const int Limit = 5;
+    
     [HttpGet]
     public async Task<IActionResult> CreateJob()
     {
@@ -29,22 +36,24 @@ public class JobController(
     {
         var activeUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        if (!ModelState.IsValid)
+        if (!ModelState.IsValid )
         {
             var categories = await categoryRepository.GetAllAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Title");
             return View("CreateJob", model);
         }
+        
+        if (WhiteSpacesSpamCheck(model, out var result)) return result;
 
         var job = new Job
         {
-            Title = model.Title!,
-            Description = model.Description!,
-            Location = model.Location!,
+            Title = model.Title!.Trim(),
+            Description = model.Description!.Trim(),
+            Location = model.Location!.Trim(),
             CategoryId = model.CategoryId,
             CreatorId = Guid.Parse(activeUserId!)
         };
-
+        
         await jobRepository.CreateAsync(job);
 
         var user = await userRepository.GetByIdAsync(Guid.Parse(activeUserId!));
@@ -52,6 +61,37 @@ public class JobController(
         await userRepository.UpdateAsync(user);
 
         return RedirectToAction("Index", "Home");
+    }
+
+    private bool WhiteSpacesSpamCheck(CreateEditJobViewModel model, out IActionResult result)
+    {
+        if(validationService.IsHasMoreSpaces(model.Title!, Limit))
+        {
+            ModelState.AddModelError("Title", $"Заголовок не повинен містити більше {Limit} пробілів підряд!");
+            {
+                result = View("CreateJob", model);
+                return true;
+            }
+        }
+        if(validationService.IsHasMoreSpaces(model.Description!, Limit))
+        {
+            ModelState.AddModelError("Description", $"Опис не повинен містити більше {Limit} пробілів підряд!");
+            {
+                result = View("CreateJob", model);
+                return true;
+            }
+        }
+        if(validationService.IsHasMoreSpaces(model.Location!, Limit))
+        {
+            ModelState.AddModelError("Location", $"Місцезнаходження не повинно містити більше {Limit} пробілів підряд!");
+            {
+                result = View("CreateJob", model);
+                return true;
+            }
+        }
+
+        result = null;
+        return false;
     }
 
 
@@ -66,9 +106,9 @@ public class JobController(
         var viewModel = new CreateEditJobViewModel
         {
             Id = job.Id,
-            Title = job.Title,
-            Description = job.Description,
-            Location = job.Location,
+            Title = job.Title.Trim(),
+            Description = job.Description.Trim(),
+            Location = job.Location.Trim(),
             CategoryId = job.CategoryId
         };
 
@@ -86,27 +126,31 @@ public class JobController(
             return View(model);
         }
 
+        if (WhiteSpacesSpamCheck(model, out var result)) return result;
+
         var job = await jobRepository.GetByIdAsync(model.Id);
 
-        job.Title = model.Title;
-        job.Description = model.Description;
-        job.Location = model.Location;
+        job.Title = model.Title!.Trim();
+        job.Description = model.Description!.Trim();
+        job.Location = model.Location!.Trim();
         job.CategoryId = model.CategoryId;
 
         await jobRepository.UpdateAsync(job);
 
         return RedirectToAction("Index", "Home");
     }
-
+    
+    
     [HttpPost]
-    public async Task<IActionResult> DeleteJob(CreateEditJobViewModel model)
+    public async Task<IActionResult> DeleteJob(int jobId)
     {
-        var job = await jobRepository.GetByIdAsync(model.Id);
+        var job = await jobRepository.GetByIdAsync(jobId);
 
-        await jobRepository.DeleteAsync(model.Id);
-
+        var userId = job.AssigneeId ?? job.CreatorId;
+        await jobRepository.DeleteAsync(jobId);
         return RedirectToAction("Index", "Home");
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -114,7 +158,7 @@ public class JobController(
     {
         var job = await jobRepository.GetByIdAsync(id);
 
-        job.Status = "Completed";
+        job.Status = JobStatuses.Completed.ToString();
         var user = await userRepository.GetByIdAsync(job.AssigneeId!.Value);
         user.CompletedJobs++;
         await userRepository.UpdateAsync(user);
@@ -133,7 +177,7 @@ public class JobController(
         var user = await userRepository.GetByIdAsync(job.AssigneeId!.Value);
         user.FailedJobs++;
         await userRepository.UpdateAsync(user);
-        job.Status = "Active";
+        job.Status = JobStatuses.Active.ToString();
         job.AssigneeId = null;
         await jobRepository.UpdateAsync(job);
 
@@ -143,22 +187,34 @@ public class JobController(
     public async Task<IActionResult> AllJobs()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var createdJobs = (await jobRepository.GetAllAsync())
-            .Where(j => j.CreatorId == Guid.Parse(userId!))
-            .OrderByDescending(j => j.Status == "InProgress")
-            .ThenBy(j => j.Status == "Completed")
-            .ThenBy(j => j.Status == "Active")
-            .ToList();
-
-        var assignedJobs = (await jobRepository.GetAllAsync())
-            .Where(j => j.AssigneeId == Guid.Parse(userId!))
-            .OrderByDescending(j => j.Status == "InProgress")
-            .ThenBy(j => j.Status == "Completed")
-            .ToList();
+        
+        var createdJobs = await GetCreatedJobs(userId);
+        var assignedJobs = await GetAssignedJobs(userId);
 
         ViewBag.CreatedJobs = createdJobs;
         ViewBag.AssignedJobs = assignedJobs;
 
         return View();
+    }
+
+    private async Task<List<Job>> GetCreatedJobs(string? userId)
+    {
+        var createdJobs = (await jobRepository.GetAllAsync())
+            .Where(j => j.CreatorId == Guid.Parse(userId!))
+            .OrderByDescending(j => j.Status == JobStatuses.InProgress.ToString())
+            .ThenBy(j => j.Status == JobStatuses.Completed.ToString())
+            .ThenBy(j => j.Status == JobStatuses.Active.ToString())
+            .ToList();
+        return createdJobs;
+    }
+
+    private async Task<List<Job>> GetAssignedJobs(string? userId)
+    {
+        var assignedJobs = (await jobRepository.GetAllAsync())
+            .Where(j => j.AssigneeId == Guid.Parse(userId!))
+            .OrderByDescending(j => j.Status == JobStatuses.InProgress.ToString())
+            .ThenBy(j => j.Status == JobStatuses.Completed.ToString())
+            .ToList();
+        return assignedJobs;
     }
 }

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Helper.Web.Models.Message;
+namespace Helper.Web.Models.MessageModels;
 
 public class CreateMessageViewModel
 {

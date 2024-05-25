@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Helper.Web.Models.Account;
+namespace Helper.Web.Models.AccountModels;
 
 public class ProfileViewModel
 {

@@ -6,9 +6,8 @@
     <nav class="header_container">
         <div class="header_left-side">
             <div class="logo_container">
-                <a class="logo" asp-area="" asp-controller="Home" asp-action="Index">Helper</a>
+                <a class="logo" asp-area="" asp-controller="Home" asp-action="Index">Helper!</a>
             </div>
-            @* @if (User.Identity!.IsAuthenticated && User.Identity.Name == "admin") *@
             @if (User.Identity!.IsAuthenticated && isAdmin != null)
             {
             <button class="header_links">
