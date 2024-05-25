@@ -22,7 +22,7 @@ namespace Helper.Domain.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Helper.Domain.Entities.CategoryModels", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,7 +93,7 @@ namespace Helper.Domain.Migrations
                     b.ToTable("Jobs");
                 });
 
-            modelBuilder.Entity("Helper.Domain.Entities.MessageModels", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.Message", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -181,7 +181,7 @@ namespace Helper.Domain.Migrations
                         .WithMany()
                         .HasForeignKey("AssigneeId");
 
-                    b.HasOne("Helper.Domain.Entities.CategoryModels", "CategoryModels")
+                    b.HasOne("Helper.Domain.Entities.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -193,12 +193,12 @@ namespace Helper.Domain.Migrations
 
                     b.Navigation("Assignee");
 
-                    b.Navigation("CategoryModels");
+                    b.Navigation("Category");
 
                     b.Navigation("Creator");
                 });
 
-            modelBuilder.Entity("Helper.Domain.Entities.MessageModels", b =>
+            modelBuilder.Entity("Helper.Domain.Entities.Message", b =>
                 {
                     b.HasOne("Helper.Domain.Entities.Job", "Job")
                         .WithMany()

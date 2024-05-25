@@ -9,6 +9,8 @@ public class DbDefaultObjects
         if (!context.Categories.Any())
         {
             context.Categories.AddRange(
+                new Category { Title = "Видалена", Description = "Категорія була видалена. Не відображається користувачу." },
+                new Category { Title = "Усі", Description = "Усі доступні категорії." },
                 new Category { Title = "Дім", Description = "Роботи по дому та прибудинковій теритирії" },
                 new Category { Title = "Діти", Description = "Догляд за дітьми, репетиторство" },
                 new Category { Title = "Авто", Description = "Ремонт та обслуговування автомобіля" }

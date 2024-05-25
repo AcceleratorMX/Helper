@@ -85,7 +85,7 @@ public class CategoryController(
 
     private int GetDefaultCategoryId()
     {
-        var defaultCategory = categoryRepository.GetAllAsync().Result.FirstOrDefault(c => c.Title == "Без категорії");
+        var defaultCategory = categoryRepository.GetAllAsync().Result.FirstOrDefault(c => c.Id == 1);
         return defaultCategory?.Id ?? throw new InvalidOperationException("Default category not found");
     }
 }

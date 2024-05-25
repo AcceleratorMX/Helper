@@ -48,14 +48,17 @@ public class HomeController(
     private async Task GetCategories()
     {
         var categories = await categoryRepository.GetAllAsync();
-        ViewData["Categories"] = categories.Select(c => c.Title).ToList();
+        ViewData["Categories"] = categories
+            .Where(c => c.Id != 1)
+            .Select(c => c.Title)
+            .ToList();
     }
 
     private async Task<List<Job>> GetJobs(string? category)
     {
         return (await jobRepository.GetAllAsync())
             .Where(job => job.Status == JobStatuses.Active.ToString() && job.CreatorId != null && (category == null ||
-                category == "1" ||
+                category == "0" ||
                 job.Category!.Title == category))
             .Select(job => new Job
             {

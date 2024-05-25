@@ -15,9 +15,7 @@ public class JobController(
     IRepository<Job, int> jobRepository,
     IRepository<Category, int> categoryRepository,
     IRepository<User, Guid> userRepository,
-    IRepository<Message, long> messageRepository,
-    ValidationService validationService,
-    JobService jobService)
+    ValidationService validationService)
     : Controller
 {
     private const int Limit = 5;
@@ -25,9 +23,16 @@ public class JobController(
     [HttpGet]
     public async Task<IActionResult> CreateJob()
     {
-        var categories = await categoryRepository.GetAllAsync();
-        ViewBag.Categories = new SelectList(categories, "Id", "Title");
+        await GetCategories();
         return View(new CreateEditJobViewModel());
+    }
+
+    private async Task GetCategories()
+    {
+        var categories = (await categoryRepository.GetAllAsync())
+            .Where(c => c.Id != 1 && c.Id != 2)
+            .ToList();
+        ViewBag.Categories = new SelectList(categories, "Id", "Title");
     }
 
     [HttpPost]
@@ -38,8 +43,7 @@ public class JobController(
 
         if (!ModelState.IsValid )
         {
-            var categories = await categoryRepository.GetAllAsync();
-            ViewBag.Categories = new SelectList(categories, "Id", "Title");
+            await GetCategories();
             return View("CreateJob", model);
         }
         
@@ -90,7 +94,7 @@ public class JobController(
             }
         }
 
-        result = null;
+        result = null!;
         return false;
     }
 
@@ -100,8 +104,7 @@ public class JobController(
     {
         var job = await jobRepository.GetByIdAsync(id);
 
-        var categories = await categoryRepository.GetAllAsync();
-        ViewBag.Categories = new SelectList(categories, "Id", "Title");
+        await GetCategories();
 
         var viewModel = new CreateEditJobViewModel
         {
@@ -121,8 +124,7 @@ public class JobController(
     {
         if (!ModelState.IsValid)
         {
-            var categories = await categoryRepository.GetAllAsync();
-            ViewBag.Categories = new SelectList(categories, "Id", "Title");
+            await GetCategories();
             return View(model);
         }
 

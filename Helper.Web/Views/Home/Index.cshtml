@@ -9,7 +9,6 @@
     <form asp-controller="Home" asp-action="Index" method="get">
         <select name="category" onchange="this.form.submit()" class="select-list">
             <option value="" hidden>Категорії</option>
-            <option value="1">Усі</option>
             @foreach (var category in categories!)
             {
                 <option value="@category" class="select-list_item">@category</option>
