@@ -21,8 +21,7 @@ public class JobRepository(HelperDbContext context) : IRepository<Job, int>
 
         return job;
     }
-
-
+    
     public async Task CreateAsync(Job entity)
     {
         await context.Jobs.AddAsync(entity);

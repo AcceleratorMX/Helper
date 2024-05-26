@@ -45,5 +45,4 @@ public class Job : Entity<int>
 
     [ForeignKey(nameof(CategoryId))]
     public Category? Category { get; set; }
-    
 }

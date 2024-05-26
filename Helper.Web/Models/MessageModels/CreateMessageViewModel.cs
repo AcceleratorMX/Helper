@@ -10,8 +10,7 @@ public class CreateMessageViewModel
     [Display(Name = "Створив")]
     public string? CreatorName { get; set; }
     
-    [StringLength(50, MinimumLength = 20, ErrorMessage = "Від {2} до {1} символів!")]
+    [StringLength(200, MinimumLength = 20, ErrorMessage = "Від {2} до {1} символів!")]
     [Required(ErrorMessage = "Введіть тексть повідомлення!")]
     public string Text { get; set; } = null!;
-    
 }
