@@ -144,11 +144,11 @@ public class JobController(
     
     
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteJob(int jobId)
     {
         var job = await jobRepository.GetByIdAsync(jobId);
-
-        var userId = job.AssigneeId ?? job.CreatorId;
+        
         await jobRepository.DeleteAsync(jobId);
         return RedirectToAction("Index", "Home");
     }
@@ -202,7 +202,7 @@ public class JobController(
     private async Task<List<Job>> GetCreatedJobs(string? userId)
     {
         var createdJobs = (await jobRepository.GetAllAsync())
-            .Where(j => j.CreatorId == Guid.Parse(userId!))
+            .Where(j => (j.CreatorId == Guid.Parse(userId!)))
             .OrderByDescending(j => j.Status == JobStatuses.InProgress.ToString())
             .ThenBy(j => j.Status == JobStatuses.Completed.ToString())
             .ThenBy(j => j.Status == JobStatuses.Active.ToString())
@@ -213,7 +213,7 @@ public class JobController(
     private async Task<List<Job>> GetAssignedJobs(string? userId)
     {
         var assignedJobs = (await jobRepository.GetAllAsync())
-            .Where(j => j.AssigneeId == Guid.Parse(userId!))
+            .Where(j => j.AssigneeId == Guid.Parse(userId!) && j.Status != JobStatuses.Active.ToString())
             .OrderByDescending(j => j.Status == JobStatuses.InProgress.ToString())
             .ThenBy(j => j.Status == JobStatuses.Completed.ToString())
             .ToList();

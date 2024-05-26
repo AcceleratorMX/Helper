@@ -38,10 +38,12 @@
                             <hr class="card_line">
                             <div class="card_buttons">
                                 <form method="post" asp-action="ApproveMessage" asp-controller="Message" class="notifications-card_button notifications-card_button-success">
+                                    @Html.AntiForgeryToken()
                                     <input type="hidden" name="messageId" value="@notification.MessageId"/>
                                     <button type="submit">Підтвердити</button>
                                 </form>
                                 <form method="post" asp-action="RejectMessage" asp-controller="Message" class="notifications-card_button notifications-card_button-danger">
+                                    @Html.AntiForgeryToken()
                                     <input type="hidden" name="messageId" value="@notification.MessageId"/>
                                     <button type="submit">Відхилити</button>
                                 </form>

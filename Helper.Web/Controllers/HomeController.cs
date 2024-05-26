@@ -31,6 +31,13 @@ public class HomeController(
             Jobs = jobs
         };
 
+        await IsAuthenticatedUserAsync();
+
+        return View(model);
+    }
+
+    private async Task IsAuthenticatedUserAsync()
+    {
         if (User.Identity!.IsAuthenticated)
         {
             var currentUserId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -41,8 +48,6 @@ public class HomeController(
             ViewData["Notifications"] = notifications;
             ViewData["NotificationsCount"] = notificationsCount;
         }
-
-        return View(model);
     }
 
     private async Task GetCategories()
@@ -74,7 +79,6 @@ public class HomeController(
             .Reverse()
             .ToList();
     }
-
 
     private async Task<List<NotificationViewModel>> GetNotificationsAsync(Guid userId)
     {

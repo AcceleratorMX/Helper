@@ -6,17 +6,16 @@
     {
         <li class="card">
             <article>
+                <span class="card_category">@job.Category!.Title</span>
+                <hr class="card_line">
                 <div class="card_header main-card_header">
                     <div class="card_title">
                         <h2>@job.Title</h2>
                     </div>
                     <span class="card_job-id">#@job.Id</span>
                 </div>
+                <hr class="card_line">
                 <div class="main-card_main">
-                    <div class="card_sidebar">
-                        <span class="card_category">@job.Category!.Title</span>
-                        <div class="card_line-vertical"></div>
-                    </div>
                     <div class="card_content">
                         <p class="card_content-text">@job.Description</p>
                     </div>
@@ -36,8 +35,9 @@
                         @if (job.Status == "InProgress")
                         {
                             <form asp-action="CancelJob" method="post">
+                                @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@job.Id"/>
-                                <button type="submit" value="Скасувати виконання" class="notifications-card_button btn-danger btn-assigned">Скасувати виконання</button>
+                                <button type="submit" value="Скасувати виконання" class="notifications-card_button btn-danger btn-assigned">Відмовитись</button>
                             </form>
                         }
                     </div>

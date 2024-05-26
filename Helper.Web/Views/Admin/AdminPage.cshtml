@@ -16,16 +16,18 @@
     <div class="search">
         <div class="input_container">
             <form asp-controller="Admin" asp-action="AdminPage" method="get" class="create-category-form_container">
-                <input type="text" name="search" class="input_field admin-page-form_title search-field" placeholder="Пошук користувача" />
+                @Html.AntiForgeryToken()
+                <input type="text" name="search" class="input_field admin-page-form_title search-field" placeholder="Пошук користувача"/>
                 <button type="submit" class="buttons admin-page-button_submit">Пошук</button>
                 @if (!ViewData.ModelState.IsValid)
                 {
-                <span class="text-danger">
-                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                    {
-                    @error.ErrorMessage <br />
-                    }
-                </span>
+                    <span class="text-danger">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            @error.ErrorMessage
+                            <br/>
+                        }
+                    </span>
                 }
             </form>
         </div>
@@ -68,8 +70,9 @@
                     <td>@user.CompletedJobs</td>
                     <td>@user.FailedJobs</td>
                     <td>
-                        <a asp-controller="Admin" asp-action="AllUsersPage" asp-route-userId="@user.Id" class="table_button-view">Завдання</a>
+                        <a asp-controller="Admin" asp-action="AllUserJobsPage" asp-route-userId="@user.Id" class="table_button-view">Завдання</a>
                         <form method="post" asp-action="DeleteUser" asp-route-userId="@user.Id">
+                            @Html.AntiForgeryToken()
                             <button type="submit" class="table_button-delete buttons">
                                 <img src="~/images/icons/delete-trash.png" alt="delete">
                             </button>

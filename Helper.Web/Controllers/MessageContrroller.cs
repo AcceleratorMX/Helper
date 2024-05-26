@@ -64,6 +64,7 @@ public class MessageController(
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> ApproveMessage(long messageId)
     {
         var message = await messageRepository.GetByIdAsync(messageId);
@@ -86,6 +87,7 @@ public class MessageController(
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> RejectMessage(long messageId)
     {
         var message = await messageRepository.GetByIdAsync(messageId);

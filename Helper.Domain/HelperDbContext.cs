@@ -9,7 +9,4 @@ public class HelperDbContext(DbContextOptions<HelperDbContext> options) : DbCont
     public DbSet<Message> Messages { get; set; }
     public DbSet<Job> Jobs { get; set; }
     public DbSet<Category> Categories { get; set; }
-
-
-
 }

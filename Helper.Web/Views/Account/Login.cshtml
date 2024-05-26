@@ -6,6 +6,7 @@
 
 <div class="login-page_container">
     <form asp-action="Login" method="post" class="form_container">
+        @Html.AntiForgeryToken()
         <h2 class="login_title">Вхід</h2>
         <div class="input_container">
             <label asp-for="Username" class="input_label">Логін</label>

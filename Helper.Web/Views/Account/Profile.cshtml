@@ -70,6 +70,7 @@
 
         <div class="update-contact-data">
             <form asp-action="UpdateProfile" method="post" class="profile-page-form_container">
+                @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="Id"/>
                 <div class="input_container">
                     <label asp-for="Email" class="input_label">Електронна адреса:</label>
@@ -87,6 +88,7 @@
             </form>
             <hr class="profile-card_line">
             <form asp-action="UpdatePassword" method="post" class="profile-page-form_container">
+                @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="Id"/>
                 <div class="input_container">
                     <label asp-for="OldPassword" class="input_label">Старий пароль:</label>

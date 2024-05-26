@@ -30,6 +30,8 @@ public class CategoryController(
         return View(model);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateCategoryAsync(CategoryViewModel model)
     {
         if (!validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
@@ -41,8 +43,8 @@ public class CategoryController(
             model.Categories = categories;
             return View("CategoryEditor", model);
         }
-        
-        
+
+
         var existingCategory = (await categoryRepository.GetAllAsync())
             .FirstOrDefault(c => c.Title.Equals(model.Title, StringComparison.OrdinalIgnoreCase));
 
@@ -64,7 +66,9 @@ public class CategoryController(
         return RedirectToAction("CategoryEditor");
     }
 
-    public async Task<IActionResult> Delete(int id)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteAsync(int id)
     {
         if (!validationService.IsAdmin(User.FindFirstValue(ClaimTypes.NameIdentifier)!))
             return RedirectToAction("Index", "Home");

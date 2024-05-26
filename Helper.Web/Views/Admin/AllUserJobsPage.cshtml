@@ -41,7 +41,8 @@
                 <td>@job.Category?.Title</td>
                 <td>
                     <form method="post" asp-controller="Admin" asp-action="DeleteUserJob" asp-route-taskId="@job.Id">
-                        <input type="hidden" name="jobId" value="@job.Id" />
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="jobId" value="@job.Id"/>
                         <button type="submit" class="table_button-delete buttons">
                             <img src="~/images/icons/delete-trash.png" alt="delete">
                         </button>

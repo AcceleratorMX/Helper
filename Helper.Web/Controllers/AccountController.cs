@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace Helper.Web.Controllers;
 
 public class AccountController(IRepository<User, Guid> userRepository, ILogger<AccountController> logger)
@@ -132,7 +131,7 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdateProfile(ProfileViewModel model)
+    public async Task<IActionResult> UpdateProfileAsync(ProfileViewModel model)
     {
         if (!ModelState.IsValid) return View("Profile", model);
 
@@ -177,7 +176,7 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> UpdatePassword(ProfileViewModel model)
+    public async Task<IActionResult> UpdatePasswordAsync(ProfileViewModel model)
     {
         if (!ModelState.IsValid)
         {

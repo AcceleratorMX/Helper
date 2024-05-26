@@ -48,6 +48,7 @@
                 <td>@category.Description</td>
                 <td>
                     <form method="post" asp-controller="Category" asp-action="Delete" asp-route-userId="@category.Id">
+                        @Html.AntiForgeryToken()
                         <input hidden name="id" value="@category.Id"/>
                         <button type="submit" class="table_button-delete buttons">
                             <img src="~/images/icons/delete-trash.png" alt="delete">

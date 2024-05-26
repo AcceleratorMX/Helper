@@ -15,6 +15,7 @@ ViewData["Title"] = "Редагувати оголошення";
     </div>
 
     <form asp-action="EditJob" method="post" class="form_container create-edit-form_container">
+        @Html.AntiForgeryToken()
         <div class="input_container">
             <label asp-for="Title" class="input_label">Назва завдання</label>
             <input asp-for="Title" class="input_field" placeholder="Вкажіть назву завдання"/>
@@ -44,7 +45,8 @@ ViewData["Title"] = "Редагувати оголошення";
 
     </form>
     <form asp-controller="Job" asp-action="DeleteJob" method="post" class="delete-form">
-        <input type="hidden" name="jobId" value="@Model.Id" />
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="jobId" value="@Model.Id"/>
         <button type="submit" class="delete-icon">
             <img src="~/images/icons/delete-trash.png" alt="видалити">
         </button>

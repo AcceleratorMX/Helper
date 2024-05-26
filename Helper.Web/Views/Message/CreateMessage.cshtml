@@ -3,10 +3,18 @@
 @{
     ViewData["Title"] = "Створити";
 }
-
 <div class="create-edit-page_wrapper">
-    <h1 class="page_title">Надіслати повідомлення</h1>
+    <div class="page_header">
+        <h1 class="page_title">Надіслати повідомлення</h1>
+        <button class="button-back buttons">
+            <a asp-controller="Home" asp-action="Index">
+                назад
+            </a>
+        </button>
+    </div>
+
     <form asp-controller="Message" asp-action="CreateMessage" method="post" class="form_container create-edit-form_container">
+        @Html.AntiForgeryToken()
         <div class="input_container">
             <input type="hidden" asp-for="JobId"/>
             <label asp-for="Text" class="input_label create-message_title">Завдання: @Model.JobTitle (#@Model.JobId)</label>
@@ -18,4 +26,6 @@
             <button type="submit" value="Відправити" class="form_button-submit">Відправити</button>
         </div>
     </form>
+
 </div>
+

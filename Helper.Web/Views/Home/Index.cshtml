@@ -7,6 +7,7 @@
 
 <div class="main-content_container">
     <form asp-controller="Home" asp-action="Index" method="get">
+        @Html.AntiForgeryToken()
         <select name="category" onchange="this.form.submit()" class="select-list">
             <option value="" hidden>Категорії</option>
             @foreach (var category in categories!)
