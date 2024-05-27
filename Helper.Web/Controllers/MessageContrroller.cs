@@ -43,7 +43,7 @@ public class MessageController(
 
         if (!ModelState.IsValid || validationService.IsHasMoreSpaces(model.Text, Limit))
         {
-            ModelState.AddModelError("Text", $"Повідомлення не повинно містити {Limit} або більше пробілів підряд!");
+            ModelState.AddModelError("Text", $"Повідомлення не повинно містити більше {Limit} підряд!");
             return View(model);
         }
 
