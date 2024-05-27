@@ -5,12 +5,10 @@ using Helper.Domain.Service;
 using Helper.Web.Models.AccountModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Helper.Web.Controllers;
 
-[Authorize]
 public class AccountController(IRepository<User, Guid> userRepository, ILogger<AccountController> logger)
     : Controller
 {
@@ -22,7 +20,7 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> LoginAsync(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid)
         {
@@ -54,7 +52,7 @@ public class AccountController(IRepository<User, Guid> userRepository, ILogger<A
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> RegisterAsync(RegisterViewModel model)
+    public async Task<IActionResult> Register(RegisterViewModel model)
     {
         if (!ModelState.IsValid)
         {
